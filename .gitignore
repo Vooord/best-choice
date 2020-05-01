@@ -1,0 +1,14 @@
+# dependencies
+/node_modules
+
+# misc
+.DS_Store
+.env
+
+dist
+.module-cache
+*.log*
+_nogit
+todo.md
+.vscode/
+.idea/
