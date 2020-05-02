@@ -1,7 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 
+const authRouter = require('./app/routes/auth.routes');
+
 const app = express();
+
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(cors());
 
@@ -11,10 +16,5 @@ const host = 'localhost';
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.post('/auth', (req, res) => {
-    console.log('req = ', req);
-    console.log('res = ', res);
-    res.send(JSON.stringify({id: 123}));
-});
-
+authRouter(app);
 app.listen(port, host, () => console.log(`Server started at http://${host}:${port}`));
