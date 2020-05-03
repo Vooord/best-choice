@@ -6,7 +6,7 @@ import {ConnectedRouter} from 'connected-react-router';
 import PropTypes from 'prop-types';
 
 import AuthPage from '../containers/AuthPage';
-import MainTable from '../components/MainTable';
+import MainTable from '../containers/MainTable';
 
 
 const MainRouter = ({history}) =>
