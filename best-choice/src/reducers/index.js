@@ -1,7 +1,9 @@
-import authReducer from './auth';
+import userReducer from './user';
+import errorReducer from './error';
 
 const reducers = {
-    auth: authReducer,
+    user: userReducer,
+    error: errorReducer,
 };
 
 export default reducers;

@@ -1,7 +1,8 @@
 import {AUTH_START, AUTH_SUCCESS, authSuccess, authFail} from '../actions/auth';
+import {updateCurrentUser} from '../actions/user';
 import {combineEpics, ofType} from 'redux-observable';
-import {mergeMap, catchError, map, tap} from 'rxjs/operators';
-import {EMPTY, from, of} from 'rxjs';
+import {mergeMap, catchError} from 'rxjs/operators';
+import {concat, EMPTY, from, of} from 'rxjs';
 
 import history from '../routes/history';
 
@@ -9,26 +10,40 @@ import history from '../routes/history';
 const onAuthStartEpic = (action$, state) =>
     action$.pipe(
         ofType(AUTH_START),
-        tap(() => console.log('onAuthStartEpic map state.value = ', state.value)),
         mergeMap(() => {
-            const {login, password} = state.value.auth;
+            const {login, password} = state.value.user.current;
 
             return from(
-                fetch('http://localhost:5000/auth', {
+                fetch('http://localhost:5000/users/auth', {
                     method: 'POST',
                     body: JSON.stringify({login, password}),
                     headers: {
                         'content-type': 'application/json',
                     },
-                }).then(response => response.json())
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+
+                    return Promise.reject(response);
+                })
             ).pipe(
-                map(res => {
-                    console.log('onAuthStartEpic map RES = ', res);
-                    return authSuccess();
+                mergeMap(res => {
+                    console.log('onAuthStartEpic RES = ', res);
+
+                    localStorage.setItem('token', res.token);
+                    return concat(
+                        of(updateCurrentUser(res)),
+                        of(authSuccess())
+                    );
                 }),
                 catchError(err => {
-                    console.log('onAuthStartEpic map ERR = ', err);
-                    return of(authFail());
+                    console.log('onAuthStartEpic ERR = ', err);
+                    if (err.status) {
+                        return of(authFail(err.status));
+                    }
+
+                    return of(authFail(err));
                 })
             );
         })
