@@ -41,7 +41,6 @@ module.exports = {
 
     'array-callback-return': 'error',
     'class-methods-use-this': 'error',
-    'consistent-return': 'error',
     'default-case': 'error',
     'eqeqeq': 'error',
     'guard-for-in': 'error',
