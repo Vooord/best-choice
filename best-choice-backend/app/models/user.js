@@ -6,15 +6,15 @@ const {UserCollection} = require('../config/schema');
 
 class User {
     // принимает все тело запроса и описывает, что с ним делать
-    constructor(reqBody) {
+    constructor(newUserFields) {
         // поля, которые сохраняются под тем же именем, как пришли в теле запроса
         const sameFields = ['login', 'firstName', 'lastName', 'midName', 'group', 'isAdmin'];
-        const newUser = _.pick(reqBody, sameFields);
+        const newUser = _.pick(newUserFields, sameFields);
 
-        const {password} = reqBody;
+        const {password} = newUserFields;
         newUser.hash = bcrypt.hashSync(password, 10);
 
-        return new UserCollection(newUser);
+        return new UserCollection(newUser).save();
     }
 
     static getById(id) {
@@ -35,6 +35,10 @@ class User {
     }
 
     static updateByLogin(login, fields) {
+        if (!_.size(fields)) {
+            return Promise.reject('Cannot update with no fields passed');
+        }
+
         return UserCollection.updateOne(
             { login },
             { $set: {

@@ -7,8 +7,8 @@ const {secret} = require('../config/db');
 const User = require('../models/user');
 
 const {
-    AUTH_ERROR_MESSAGE, AUTH_ERROR_STATUS,
-    REGISTER_ERROR_MESSAGE, REGISTER_ERROR_STATUS,
+    AUTH_ERROR_MESSAGE, UNAUTHORIZED_STATUS,
+    DUPLICATE_LOGIN_MESSAGE, DUPLICATE_ENTITY_STATUS,
     NOT_FOUND_STATUS,
     USER_NOT_FOUND_MESSAGE,
 } = require('../constants/http');
@@ -27,18 +27,17 @@ class UserController {
             });
         }
 
-        return res.status(AUTH_ERROR_STATUS).json({ message: AUTH_ERROR_MESSAGE });
+        return res.status(UNAUTHORIZED_STATUS).json({ message: AUTH_ERROR_MESSAGE });
     };
 
     static async register (req, res) {
         const { login } = req.body;
 
         if (await User.exists(login)) {
-            return res.status(REGISTER_ERROR_STATUS).json({ message: REGISTER_ERROR_MESSAGE });
+            return res.status(DUPLICATE_ENTITY_STATUS).json({ message: DUPLICATE_LOGIN_MESSAGE });
         }
 
-        const user = new User(req.body);
-        await user.save();
+        await new User(req.body);
         return res.json({});
     };
 

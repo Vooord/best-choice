@@ -5,7 +5,9 @@ const cors = require('cors');
 const jwt = require('./app/helpers/jwt');
 const errorHandler = require('./app/helpers/errorHandler');
 
-const authRouter = require('./app/routes/user');
+const userRouter = require('./app/routes/user');
+const topicRouter = require('./app/routes/topic');
+const adviserRouter = require('./app/routes/adviser');
 
 const connectionConfig = require('./app/config/connection');
 const dbConfig = require('./app/config/db');
@@ -22,10 +24,10 @@ app.use(cors());
 app.use(jwt());
 app.use(errorHandler);
 
-app.use('/users', authRouter);
+app.use('/users', userRouter);
+app.use('/topics', topicRouter);
+app.use('/advisers', adviserRouter);
 
-
-// app.get('/', (req, res) => res.send('Hello World!'));
 
 // подключаемся к монге
 const mongoUrl = process.env.MONGODB_URL || dbConfig.path;

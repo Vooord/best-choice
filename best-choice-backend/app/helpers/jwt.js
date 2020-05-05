@@ -20,6 +20,12 @@ function jwt() {
             // public routes that don't require authentication
             '/users/auth',
             '/users/register',
+
+            '/topics/add', // TODO удалить потом
+            '/topics/occupy', // TODO удалить потом
+            '/topics/', // TODO удалить потом
+
+            '/advisers/add', // TODO удалить потом
         ],
     });
 }
