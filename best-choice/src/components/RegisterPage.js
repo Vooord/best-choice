@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import Copyright from './CopyRight';
 
 
@@ -51,88 +51,91 @@ function SignUp(props) {
     const classes = useStyles();
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
+        localStorage.getItem('token') ?
+            <Redirect to={{ pathname: '/', state: { from: '/register' } }} />
+            :
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
                     Sign up
-                </Typography>
-                <form className={classes.form} noValidate onSubmit={onSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="First Name"
-                                value={firstName || ''}
-                                onChange={changeFirstName}
+                    </Typography>
+                    <form className={classes.form} noValidate onSubmit={onSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="First Name"
+                                    value={firstName || ''}
+                                    onChange={changeFirstName}
                                 // autoFocus
-                            />
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="Last Name"
+                                    value={lastName || ''}
+                                    onChange={changeSecondName}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="Login"
+                                    value={login || ''}
+                                    onChange={changeLogin}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="Password"
+                                    type="password"
+                                    value={password || ''}
+                                    onChange={changePassword}
+                                />
+                            </Grid>
+                            {/*<Grid item xs={12}>*/}
+                            {/*    <FormControlLabel*/}
+                            {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
+                            {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
+                            {/*    />*/}
+                            {/*</Grid>*/}
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="Last Name"
-                                value={lastName || ''}
-                                onChange={changeSecondName}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="Login"
-                                value={login || ''}
-                                onChange={changeLogin}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                label="Password"
-                                type="password"
-                                value={password || ''}
-                                onChange={changePassword}
-                            />
-                        </Grid>
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <FormControlLabel*/}
-                        {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
-                        {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
                         Sign Up
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <Link to="/auth">
+                        </Button>
+                        <Grid container justify="flex-end">
+                            <Grid item>
+                                <Link to="/auth">
                                 Already have an account? Sign in
-                            </Link>
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </form>
-            </div>
-            <Box mt={5}>
-                <Copyright />
-            </Box>
-        </Container>
+                    </form>
+                </div>
+                <Box mt={5}>
+                    <Copyright />
+                </Box>
+            </Container>
     );
 }
 

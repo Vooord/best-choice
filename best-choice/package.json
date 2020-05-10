@@ -18,7 +18,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
     "rxjs": "latest",
-    "seamless-immutable": "^7.1.4"
+    "seamless-immutable": "^7.1.4",
+    "lodash": "latest"
   },
   "devDependencies": {
     "@material-ui/icons": "^4.9.1",

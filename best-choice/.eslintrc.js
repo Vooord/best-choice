@@ -51,7 +51,6 @@ module.exports = {
     'no-duplicate-imports': "error",
 
 
-
     // Ya-Market copy
     'react/prop-types': 'off',
     'react/display-name': 'off',
