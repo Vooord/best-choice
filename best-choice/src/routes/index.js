@@ -11,7 +11,7 @@ import PrivateRoute from '../components/PrivateRoute';
 
 import RegisterPage from '../containers/RegisterPage';
 import AuthPage from '../containers/AuthPage';
-import MainTable from '../containers/MainTable';
+import MainTableSwitcher from '../containers/MainTableSwitcher';
 
 import {actualizeUser} from '../actions/user';
 
@@ -29,7 +29,7 @@ const MainRouter = props => {
             <Switch>
                 <Route path="/register" component={RegisterPage}/>
                 <Route path="/auth" component={AuthPage}/>
-                <PrivateRoute path="/" component={MainTable}/>
+                <PrivateRoute path="/" component={MainTableSwitcher}/>
                 <Redirect from="*" to="/" />
             </Switch>
         </ConnectedRouter>

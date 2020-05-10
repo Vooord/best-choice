@@ -5,7 +5,7 @@ import Immutable from 'seamless-immutable';
 const topicReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case TOPICS_UPDATE: {
-            return Immutable.merge(state, payload);
+            return Immutable.from(payload);
         }
 
         case OCCUPY_TOPIC_SUCCESS: {

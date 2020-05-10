@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import MainTableComponent from '../components/MainTable';
+import StudentMainTableComponent from '../components/StudentMainTable';
 
 import {connect} from 'react-redux';
 import {compact, filter} from 'lodash';
@@ -7,27 +7,35 @@ import {compact, filter} from 'lodash';
 import {updateTopics, occupyTopic} from '../actions/topic';
 import {makeAuthHeader} from '../helpers/jwt';
 
+import history from '../routes/history';
 
-function MainTable(props) {
-    const {topics, onOccupyButtonClick, group} = props;
+
+function StudentMainTable(props) {
+    const {
+        topics,
+        // eslint-disable-next-line no-shadow
+        updateTopics,
+        onOccupyButtonClick,
+        group,
+    } = props;
+
+    const onLogoutClick = () => {
+        localStorage.removeItem('token');
+        history.push('/auth');
+    };
 
     useEffect(() => {
+        // дожидаемся актуализации пользователя
         if (!group) {
             return;
         }
 
-        const {
-            // eslint-disable-next-line no-shadow
-            updateTopics,
-        } = props;
+        async function fetchTopics() {
+            const url = `http://localhost:5000/topics/?group=${group}`;
 
-        const url = `http://localhost:5000/topics/?group=${group}`;
-
-        const fetchTopics = async () => {
             const newTopics = await fetch(url, {headers: makeAuthHeader()})
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
                     const data = {};
                     result.forEach(topic => {
                         const {title, adviser, owner} = topic;
@@ -42,13 +50,20 @@ function MainTable(props) {
 
                     return data;
                 });
+            // eslint-disable-next-line no-use-before-define
             updateTopics(newTopics);
-        };
+        }
+
         fetchTopics();
+        setInterval(fetchTopics, 1000);
     }, [group]);
 
     return (
-        <MainTableComponent topics={topics} onOccupyButtonClick={onOccupyButtonClick}/>
+        <StudentMainTableComponent
+            topics={topics}
+            onOccupyButtonClick={onOccupyButtonClick}
+            onLogoutClick={onLogoutClick}
+        />
     );
 }
 
@@ -63,7 +78,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     updateTopics: topics => dispatch(updateTopics(topics)),
-    onOccupyButtonClick: title => console.log('onOccupyButtonClick title = ', title) || dispatch(occupyTopic(title)),
+    onOccupyButtonClick: title => dispatch(occupyTopic(title)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainTable);
+export default connect(mapStateToProps, mapDispatchToProps)(StudentMainTable);

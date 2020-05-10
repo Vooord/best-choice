@@ -21,7 +21,7 @@ const occupyTopicEpic = (action$, state) =>
             return from(
                 fetch('http://localhost:5000/topics/occupy', {
                     method: 'POST',
-                    body: JSON.stringify({login: current.login, title}),
+                    body: JSON.stringify({title}),
                     headers: {
                         'content-type': 'application/json',
                         ...makeAuthHeader(),

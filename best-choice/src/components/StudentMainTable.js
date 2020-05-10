@@ -1,7 +1,5 @@
 import React from 'react';
 
-import {omit, pick, keys, entries} from 'lodash';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,6 +10,14 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
+import {omit, pick, keys, entries} from 'lodash';
+
+
+const actionButtonStyle = theme => ({
+    margin: '10px 5px',
+    padding: 10,
+    border: `1px solid ${theme.palette.grey[300]}`,
+});
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -27,7 +33,19 @@ const useStyles = makeStyles(theme => ({
     buttonCell: {
         padding: 0,
     },
+    bottomButtons: {
+        textAlign: 'right',
+    },
+    logoutButton: {
+        ...actionButtonStyle(theme),
+        color: theme.palette.secondary.main,
+    },
+    updateButton: {
+        ...actionButtonStyle(theme),
+        color: theme.palette.primary.main,
+    },
 }));
+
 
 const headers = {
     title: 'Тема',
@@ -36,10 +54,8 @@ const headers = {
     owner: 'Исполнитель',
 };
 
-
-
-const MainTable = props => {
-    const {topics, onOccupyButtonClick} = props;
+const StudentMainTable = props => {
+    const {topics, onOccupyButtonClick, onLogoutClick} = props;
     const classes = useStyles();
 
     return (
@@ -76,8 +92,12 @@ const MainTable = props => {
                     ))}
                 </TableBody>
             </Table>
+            <div className={classes.bottomButtons}>
+                <Button onClick={() => console.log('UPDATE')} className={classes.updateButton}>{'Обновить'}</Button>
+                <Button onClick={onLogoutClick} className={classes.logoutButton}>{'Выйти'}</Button>
+            </div>
         </TableContainer>
     );
 };
 
-export default MainTable;
+export default StudentMainTable;
