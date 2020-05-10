@@ -22,8 +22,6 @@ function jwt() {
             '/users/register',
 
             '/topics/add', // TODO удалить потом
-            '/topics/occupy', // TODO удалить потом
-            '/topics/', // TODO удалить потом
 
             '/advisers/add', // TODO удалить потом
         ],

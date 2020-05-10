@@ -26,13 +26,16 @@ class Topic {
         return TopicCollection.findOne({ title }, {'__v': false});
     }
 
+    static getByOwner(owner) {
+        return TopicCollection.findOne({ owner }, {'__v': false});
+    }
+
     static getByGroup(group) {
         return TopicCollection.find({ group }, {'__v': false});
     };
 
     static exists(title) {
-        return TopicCollection.findOne({ title })
-            .then(topic => (!!topic));
+        return Topic.getByTitle(title).then(topic => (!!topic));
     }
 
     static updateByTitle(title, fields) {

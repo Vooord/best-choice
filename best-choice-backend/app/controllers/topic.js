@@ -4,7 +4,7 @@ const Adviser = require('../models/adviser');
 
 const {
     DUPLICATE_ENTITY_STATUS, PERMISSION_DENIED_STATUS,
-    DUPLICATE_TOPIC_MESSAGE, OCCUPIED_TOPIC_MESSAGE, UNAVAILABLE_TOPIC_MESSAGE,
+    DUPLICATE_TOPIC_MESSAGE, OCCUPIED_TOPIC_MESSAGE, GROUP_ERROR_TOPIC_MESSAGE,
 } = require('../constants/http');
 
 
@@ -40,32 +40,36 @@ class TopicController {
 
     // ready
     static async occupy (req, res) {
-        const {login, title} = req.body;
+        const {title} = req.body;
 
-        const user = await User.getByLogin(login);
-        const topic = await Topic.getByTitle(title);
+        const user = await User.getById(req.user.sub);
+        const currentTopic = await Topic.getByOwner(user._id);
+        const updatedTopic = await Topic.getByTitle(title);
 
-        if (user.group !== topic.group) {
+        if (updatedTopic.owner && updatedTopic.owner !== user.login) {
             return res.status(PERMISSION_DENIED_STATUS).json({ message: OCCUPIED_TOPIC_MESSAGE });
         }
 
-        if (topic.owner) {
-            return res.status(PERMISSION_DENIED_STATUS).json({ message: UNAVAILABLE_TOPIC_MESSAGE });
+        if (user.group !== updatedTopic.group) {
+            return res.status(PERMISSION_DENIED_STATUS).json({ message: GROUP_ERROR_TOPIC_MESSAGE });
         }
 
         await Topic.updateByTitle(title, {owner: user._id});
+        if (currentTopic) {
+            await Topic.updateByTitle(currentTopic.title, {owner: null});
+        }
 
         return res.json({});
     }
 
     // пока умеет только по группе
     static async getAll (req, res) {
-        const {group} = req.body;
+        const {group} = req.query;
 
         if (group) {
             const populatedTopics = await Topic.populate(
                 await Topic.getByGroup(group),
-                {path: 'owner', select: {'firstName': 1, 'lastName': 1, '_id': 0}}
+                {path: 'owner', select: {'firstName': 1, 'lastName': 1, 'login': 1, '_id': 0}}
             )
                 .then(ownerPopulatedTopics => Topic.populate(
                     ownerPopulatedTopics,

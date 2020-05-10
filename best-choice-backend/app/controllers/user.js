@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 const {secret} = require('../config/db');
 const User = require('../models/user');
+const Topic = require('../models/topic');
 
 const {
     AUTH_ERROR_MESSAGE, UNAUTHORIZED_STATUS,
@@ -64,7 +65,11 @@ class UserController {
     static async getCurrent (req, res) {
         const currentUser = await User.getById(req.user.sub);
         if (currentUser) {
-            return res.json(currentUser);
+            const currentTopic = await Topic.getByOwner(currentUser._id);
+            return res.json({
+                ...currentUser.toJSON(),
+                topic: (currentTopic && currentTopic.title) || null,
+            });
         }
 
         return res.status(NOT_FOUND_STATUS).json({ message: USER_NOT_FOUND_MESSAGE });
