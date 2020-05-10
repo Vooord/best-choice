@@ -21,8 +21,11 @@ const useStyles = makeStyles(theme => ({
         border: `2px solid ${theme.palette.grey[500]}`,
         fontWeight: 'bold',
     },
-    tableCell: {
+    bodyCell: {
         border: `1px solid ${theme.palette.grey[300]}`,
+    },
+    buttonCell: {
+        padding: 0,
     },
 }));
 
@@ -56,17 +59,17 @@ const MainTable = props => {
                 <TableBody>
                     {topics.map(topic => (
                         <TableRow key={topic.title} className={classes.tableRow}>
-                            <TableCell component="th" scope="row" className={classes.tableCell}>{topic.title}</TableCell>
+                            <TableCell component="th" scope="row" className={classes.bodyCell}>{topic.title}</TableCell>
                             {entries(omit(pick(topic, keys(headers)), ['title', 'owner'])).map(([k, v]) =>
                                 <TableCell
                                     key={k}
-                                    className={classes.tableCell}
+                                    className={classes.bodyCell}
                                     align={'right'}
                                 >{v}</TableCell>)
                             }
-                            <TableCell className={classes.tableCell} align={'center'}>{
+                            <TableCell className={`${classes.bodyCell} ${classes.buttonCell}`} align={'center'}>{
                                 topic.owner ||
-                                <Button variant="outlined" onClick={() => onOccupyButtonClick(topic.title)}
+                                <Button size="small" variant="outlined" onClick={() => onOccupyButtonClick(topic.title)}
                                 >{'Занять'}</Button>
                             }</TableCell>
                         </TableRow>

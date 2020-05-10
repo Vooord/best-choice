@@ -34,15 +34,10 @@ const occupyTopicEpic = (action$, state) =>
                     return Promise.reject(response);
                 })
             ).pipe(
-                mergeMap(() => {
-                    const owner = [current.firstName, current.lastName].join(' ');
-                    const ownerLogin = current.login;
-
-                    return concat(
-                        of(updateCurrentUser({topic: title})),
-                        of(occupyTopicSuccess({owner, ownerLogin, title}))
-                    );
-                }),
+                mergeMap(() => concat(
+                    of(occupyTopicSuccess({user: current, title})),
+                    of(updateCurrentUser({topic: title}))
+                )),
                 catchError(err => {
                     console.log('occupyTopicEpic err = ', err);
                     if (err.status) {

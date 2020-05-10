@@ -9,15 +9,22 @@ const topicReducer = (state = {}, { type, payload }) => {
         }
 
         case OCCUPY_TOPIC_SUCCESS: {
-            const {owner, ownerLogin, title} = payload;
+            const {user, title: newTopic} = payload;
+            const currentTopic = user.topic;
+            const fullName = [user.firstName, user.lastName].join(' ');
+
             const newTopicState = {
-                [title]: {
-                    ...state[title],
-                    owner,
-                    ownerLogin,
+                [currentTopic]: {
+                    owner: null,
+                    ownerLogin: null,
+                },
+                [newTopic]: {
+                    owner: fullName,
+                    ownerLogin: user.login,
                 },
             };
-            return Immutable.merge(state, newTopicState);
+
+            return Immutable.merge(state, newTopicState, {deep: true});
         }
 
         default: {
