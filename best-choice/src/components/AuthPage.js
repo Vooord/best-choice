@@ -9,7 +9,6 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
@@ -37,6 +36,15 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const label = {
+    LOGIN: 'Логин',
+    PASSWORD: 'Пароль',
+};
+
+const text = {
+    SIGN_IN: 'Войти',
+    REGISTER_REDIRECT: 'Еще нет аакуанта? Зарегестрируйтесь',
+};
 
 function AuthPage(props) {
     const {
@@ -44,7 +52,6 @@ function AuthPage(props) {
         changeLogin, changePassword,
         onSubmit: onSubmitDispatch,
     } = props;
-
 
     const onSubmit = event => {
         event.preventDefault();
@@ -63,17 +70,13 @@ function AuthPage(props) {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
-                    Sign in
-                    </Typography>
-                    <form className={classes.form} noValidate onSubmit={onSubmit}>
+                    <form className={classes.form} onSubmit={onSubmit}>
                         <TextField
                             variant="outlined"
                             margin="normal"
                             required
                             fullWidth
-                            label="Login"
-                            // autoFocus
+                            label={label.LOGIN}
                             value={login || ''}
                             onChange={changeLogin}
                         />
@@ -82,7 +85,7 @@ function AuthPage(props) {
                             margin="normal"
                             required
                             fullWidth
-                            label="Password"
+                            label={label.PASSWORD}
                             type="password"
                             value={password || ''}
                             onChange={changePassword}
@@ -97,9 +100,7 @@ function AuthPage(props) {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                        >
-                        Sign In
-                        </Button>
+                        >{text.SIGN_IN}</Button>
                         <Grid container  justify="flex-end">
                             {/*<Grid item xs>*/}
                             {/*    <Link href="#" variant="body2">*/}
@@ -107,9 +108,7 @@ function AuthPage(props) {
                             {/*    </Link>*/}
                             {/*</Grid>*/}
                             <Grid item>
-                                <Link to="/register">
-                                Don't have an account? Sign Up
-                                </Link>
+                                <Link to="/register">{text.REGISTER_REDIRECT}</Link>
                             </Grid>
                         </Grid>
                     </form>

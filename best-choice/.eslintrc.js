@@ -61,7 +61,6 @@ module.exports = {
     'default-case': 'error',
     'eqeqeq': 'error',
     'guard-for-in': 'error',
-    'no-alert': 'error',
     'no-case-declarations': 'error',
     'no-else-return': 'error',
     'no-loop-func': 'error',

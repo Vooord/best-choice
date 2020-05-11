@@ -1,6 +1,6 @@
 import {REGISTER_START, REGISTER_SUCCESS, registerSuccess, registerFail} from '../actions/register';
 import {combineEpics, ofType} from 'redux-observable';
-import {mergeMap, catchError, map} from 'rxjs/operators';
+import {mergeMap, catchError} from 'rxjs/operators';
 import {EMPTY, from, of} from 'rxjs';
 
 import history from '../routes/history';
@@ -11,6 +11,7 @@ const onRegisterStartEpic = (action$, state) =>
         ofType(REGISTER_START),
         mergeMap(() => {
             const {login, password, firstName, lastName} = state.value.user.new;
+            console.log('login, password, firstName, lastName = ', login, password, firstName, lastName);
             return from(
                 fetch('http://localhost:5000/users/register', {
                     method: 'POST',
@@ -19,26 +20,20 @@ const onRegisterStartEpic = (action$, state) =>
                         'content-type': 'application/json',
                     },
                 }).then(response => {
-                    console.log('response = ', response);
                     if (response.ok) {
                         return response.json();
                     }
-                    return Promise.reject(response);
+                    return Promise.reject(response.json());
                 })
             ).pipe(
-                map(res => {
-                    console.log('onRegisterStartEpic response.json() = ', res);
-                    return registerSuccess();
-                }),
-                catchError(err => {
-                    console.log('onRegisterStartEpic ERR = ', err);
-                    if (err.status) {
-
-                        return of(registerFail(err.status));
-                    }
-
-                    return of(registerFail(err));
-                })
+                mergeMap(() => of(registerSuccess())),
+                catchError(errPromise => from(errPromise)
+                    .pipe(
+                        mergeMap(err => {
+                            window.alert(err.message);
+                            return of(registerFail(err));
+                        })
+                    ))
             );
         })
     );
@@ -47,6 +42,7 @@ const onRegisterSuccessEpic = action$ =>
     action$.pipe(
         ofType(REGISTER_SUCCESS),
         mergeMap(() => {
+            window.alert('Вы успешно зарегистрированы');
             history.push('/auth');
             return EMPTY;
         })

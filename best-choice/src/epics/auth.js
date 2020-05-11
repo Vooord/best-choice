@@ -1,8 +1,8 @@
 import {AUTH_START, AUTH_SUCCESS, authSuccess, authFail} from '../actions/auth';
-import {updateCurrentUser} from '../actions/user';
+import {setCurrentUser, setNewUser} from '../actions/user';
 import {combineEpics, ofType} from 'redux-observable';
 import {mergeMap, catchError} from 'rxjs/operators';
-import {concat, EMPTY, from, of} from 'rxjs';
+import {concat, from, of} from 'rxjs';
 
 import history from '../routes/history';
 
@@ -11,7 +11,7 @@ const onAuthStartEpic = (action$, state) =>
     action$.pipe(
         ofType(AUTH_START),
         mergeMap(() => {
-            const {login, password} = state.value.user.current;
+            const {login, password} = state.value.user.new;
 
             return from(
                 fetch('http://localhost:5000/users/auth', {
@@ -25,26 +25,17 @@ const onAuthStartEpic = (action$, state) =>
                         return response.json();
                     }
 
-                    return Promise.reject(response);
+                    return Promise.reject(response.json());
                 })
             ).pipe(
-                mergeMap(res => {
-                    console.log('onAuthStartEpic RES = ', res);
-
-                    localStorage.setItem('token', res.token);
-                    return concat(
-                        of(updateCurrentUser(res)),
-                        of(authSuccess())
-                    );
-                }),
-                catchError(err => {
-                    console.log('onAuthStartEpic ERR = ', err);
-                    if (err.status) {
-                        return of(authFail(err.status));
-                    }
-
-                    return of(authFail(err));
-                })
+                mergeMap(res => of(authSuccess(res))),
+                catchError(errPromise => from(errPromise)
+                    .pipe(
+                        mergeMap(err => {
+                            window.alert(err.message);
+                            return of(authFail(err));
+                        })
+                    ))
             );
         })
     );
@@ -52,9 +43,14 @@ const onAuthStartEpic = (action$, state) =>
 const onAuthSuccessEpic = action$ =>
     action$.pipe(
         ofType(AUTH_SUCCESS),
-        mergeMap(() => {
-            history.push('/table');
-            return EMPTY;
+        mergeMap(({payload: currentUser}) => {
+            localStorage.setItem('token', currentUser.token);
+            history.push('/');
+
+            return concat(
+                of(setCurrentUser(currentUser)),
+                of(setNewUser({}))
+            );
         })
     );
 

@@ -4,65 +4,54 @@ import StudentMainTableComponent from '../components/StudentMainTable';
 import {connect} from 'react-redux';
 import {compact, filter} from 'lodash';
 
-import {updateTopics, occupyTopic} from '../actions/topic';
+import {setTopics, occupyTopic} from '../actions/topic';
+import {updateCurrentUser} from '../actions/user';
 import {makeAuthHeader} from '../helpers/jwt';
-
-import history from '../routes/history';
 
 
 function StudentMainTable(props) {
     const {
         topics,
         // eslint-disable-next-line no-shadow
-        updateTopics,
+        setTopics,
+        setIntervalId,
         onOccupyButtonClick,
         group,
     } = props;
 
-    const onLogoutClick = () => {
-        localStorage.removeItem('token');
-        history.push('/auth');
-    };
 
     useEffect(() => {
-        // дожидаемся актуализации пользователя
-        if (!group) {
-            return;
-        }
-
         async function fetchTopics() {
-            const url = `http://localhost:5000/topics/?group=${group}`;
+            const url = 'http://localhost:5000/topics/';
 
             const newTopics = await fetch(url, {headers: makeAuthHeader()})
                 .then(response => response.json())
                 .then(result => {
                     const data = {};
                     result.forEach(topic => {
-                        const {title, adviser, owner} = topic;
-                        data[title] = {
-                            title,
+                        const {_id: id, adviser, owner, ...restTopic} = topic;
+                        data[id] = {
+                            id,
                             adviser: adviser && compact([adviser.lastName, adviser.firstName, adviser.midName]).join(' '),
                             owner: owner && compact([owner.lastName, owner.firstName]).join(' '),
-                            group,
                             ownerLogin: owner && owner.login,
+                            ...restTopic,
                         };
                     });
 
                     return data;
                 });
-            // eslint-disable-next-line no-use-before-define
-            updateTopics(newTopics);
+            setTopics(newTopics);
         }
 
         fetchTopics();
-        setInterval(fetchTopics, 1000);
+        setIntervalId(setInterval(fetchTopics, 1000));
     }, [group]);
 
     return (
         <StudentMainTableComponent
             topics={topics}
             onOccupyButtonClick={onOccupyButtonClick}
-            onLogoutClick={onLogoutClick}
         />
     );
 }
@@ -77,8 +66,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    updateTopics: topics => dispatch(updateTopics(topics)),
-    onOccupyButtonClick: title => dispatch(occupyTopic(title)),
+    setIntervalId: intervalId => dispatch(updateCurrentUser({intervalId})),
+
+    setTopics: topics => dispatch(setTopics(topics)),
+    onOccupyButtonClick: topicId => dispatch(occupyTopic(topicId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentMainTable);

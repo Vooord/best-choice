@@ -22,7 +22,7 @@ const actualizeUserEpic = (action$, state) =>
                             return response.json();
                         }
 
-                        return Promise.reject(response);
+                        return Promise.reject(response.json());
                     })
             ).pipe(
                 mergeMap(res =>
@@ -30,14 +30,13 @@ const actualizeUserEpic = (action$, state) =>
                         of(updateCurrentUser(res)),
                         of(actualizeUserSuccess())
                     )),
-                catchError(err => {
-                    console.log('actualizeUserEpic err = ', err);
-                    if (err.status) {
-                        return of(actualizeUserFail(err.status));
-                    }
-
-                    return of(actualizeUserFail(err));
-                })
+                catchError(errPromise => from(errPromise)
+                    .pipe(
+                        mergeMap(err => {
+                            window.alert(err.message);
+                            return of(actualizeUserFail(err));
+                        })
+                    ))
             ))
     );
 

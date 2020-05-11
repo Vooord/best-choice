@@ -1,6 +1,6 @@
 import {AUTH_FAIL, AUTH_START, AUTH_SUCCESS} from '../actions/auth';
 import {REGISTER_START, REGISTER_FAIL, REGISTER_SUCCESS} from '../actions/register';
-import {CURRENT_USER_UPDATE, NEW_USER_UPDATE} from '../actions/user';
+import {CURRENT_USER_SET, CURRENT_USER_UPDATE, NEW_USER_SET, NEW_USER_UPDATE} from '../actions/user';
 
 import Immutable from 'seamless-immutable';
 
@@ -12,9 +12,18 @@ const initialState = {
 
 const userReducer = (state = initialState, { type, payload }) => {
     switch (type) {
+        case CURRENT_USER_SET: {
+            return Immutable.set(state, 'current', payload);
+        }
+
         case CURRENT_USER_UPDATE: {
             const newCurrentUserState =  Immutable.merge(state.current, payload);
             return Immutable.set(state, 'current', newCurrentUserState);
+        }
+
+
+        case NEW_USER_SET: {
+            return Immutable.set(state, 'new', payload);
         }
 
         case NEW_USER_UPDATE: {

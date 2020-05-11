@@ -10,14 +10,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
+import LogoutButton from '../containers/LogoutButton';
+
 import {omit, pick, keys, entries} from 'lodash';
 
-
-const actionButtonStyle = theme => ({
-    margin: '10px 5px',
-    padding: 10,
-    border: `1px solid ${theme.palette.grey[300]}`,
-});
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -33,17 +29,6 @@ const useStyles = makeStyles(theme => ({
     buttonCell: {
         padding: 0,
     },
-    bottomButtons: {
-        textAlign: 'right',
-    },
-    logoutButton: {
-        ...actionButtonStyle(theme),
-        color: theme.palette.secondary.main,
-    },
-    updateButton: {
-        ...actionButtonStyle(theme),
-        color: theme.palette.primary.main,
-    },
 }));
 
 
@@ -55,7 +40,7 @@ const headers = {
 };
 
 const StudentMainTable = props => {
-    const {topics, onOccupyButtonClick, onLogoutClick} = props;
+    const {topics, onOccupyButtonClick} = props;
     const classes = useStyles();
 
     return (
@@ -85,17 +70,14 @@ const StudentMainTable = props => {
                             }
                             <TableCell className={`${classes.bodyCell} ${classes.buttonCell}`} align={'center'}>{
                                 topic.owner ||
-                                <Button size="small" variant="outlined" onClick={() => onOccupyButtonClick(topic.title)}
+                                <Button size="small" variant="outlined" onClick={() => onOccupyButtonClick(topic.id)}
                                 >{'Занять'}</Button>
                             }</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <div className={classes.bottomButtons}>
-                <Button onClick={() => console.log('UPDATE')} className={classes.updateButton}>{'Обновить'}</Button>
-                <Button onClick={onLogoutClick} className={classes.logoutButton}>{'Выйти'}</Button>
-            </div>
+            <LogoutButton/>
         </TableContainer>
     );
 };

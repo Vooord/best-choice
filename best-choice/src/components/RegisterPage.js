@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
@@ -36,10 +35,24 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
+const label = {
+    FIRST_NAME: 'Имя',
+    SECOND_NAME: 'Фамилия',
+    LOGIN: 'Логин',
+    PASSWORD: 'Пароль',
+    CONFIRM_PASSWORD: 'Повторите пароль',
+};
+
+const text = {
+    REGISTER: 'Зарегистрироваться',
+    AUTH_REDIRECT: 'Уже есть аккаунт? Войдите',
+};
+
 function SignUp(props) {
     const {
         firstName, lastName, login, password,
-        changeFirstName, changeSecondName, changeLogin, changePassword,
+        changeFirstName, changeLastName, changeLogin, changePassword,
         onSubmit: onSubmitDispatch,
     } = props;
 
@@ -60,17 +73,14 @@ function SignUp(props) {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
-                    Sign up
-                    </Typography>
-                    <form className={classes.form} noValidate onSubmit={onSubmit}>
+                    <form className={classes.form} onSubmit={onSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    label="First Name"
+                                    label={label.FIRST_NAME}
                                     value={firstName || ''}
                                     onChange={changeFirstName}
                                 // autoFocus
@@ -81,9 +91,9 @@ function SignUp(props) {
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    label="Last Name"
+                                    label={label.SECOND_NAME}
                                     value={lastName || ''}
-                                    onChange={changeSecondName}
+                                    onChange={changeLastName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -91,7 +101,7 @@ function SignUp(props) {
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    label="Login"
+                                    label={label.LOGIN}
                                     value={login || ''}
                                     onChange={changeLogin}
                                 />
@@ -101,12 +111,25 @@ function SignUp(props) {
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    label="Password"
+                                    label={label.PASSWORD}
                                     type="password"
                                     value={password || ''}
                                     onChange={changePassword}
                                 />
                             </Grid>
+
+                            {/*<Grid item xs={12}>*/}
+                            {/*    <TextField*/}
+                            {/*        variant="outlined"*/}
+                            {/*        required*/}
+                            {/*        fullWidth*/}
+                            {/*        label={label.CONFIRM_PASSWORD}*/}
+                            {/*        type="password"*/}
+                            {/*        value={}*/}
+                            {/*        onChange={changePassword}*/}
+                            {/*    />*/}
+                            {/*</Grid>*/}
+
                             {/*<Grid item xs={12}>*/}
                             {/*    <FormControlLabel*/}
                             {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
@@ -120,19 +143,15 @@ function SignUp(props) {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                        >
-                        Sign Up
-                        </Button>
+                        >{text.REGISTER}</Button>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                <Link to="/auth">
-                                Already have an account? Sign in
-                                </Link>
+                                <Link to="/auth">{text.AUTH_REDIRECT}</Link>
                             </Grid>
                         </Grid>
                     </form>
                 </div>
-                <Box mt={5}>
+                <Box mt={8}>
                     <Copyright />
                 </Box>
             </Container>

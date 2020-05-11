@@ -1,3 +1,5 @@
+// Пока что он бесполезен
+
 import { AUTH_FAIL } from '../actions/auth';
 import { REGISTER_FAIL } from '../actions/register';
 

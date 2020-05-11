@@ -11,6 +11,6 @@ export const {
     [AUTH_FAIL]: authFail,
 } = {
     [AUTH_START]: () => createAction(AUTH_START),
-    [AUTH_SUCCESS]: () => createAction(AUTH_SUCCESS),
+    [AUTH_SUCCESS]: payload => createAction(AUTH_SUCCESS, payload),
     [AUTH_FAIL]: payload => createAction(AUTH_FAIL, payload),
 };

@@ -2,10 +2,10 @@ import {connect} from 'react-redux';
 import AuthPage from '../components/AuthPage';
 
 import {authStart} from '../actions/auth';
-import {updateCurrentUser} from '../actions/user';
+import {updateNewUser} from '../actions/user';
 
 const mapStateToProps = state => {
-    const { user: { current: {login, password} } } = state;
+    const { user: { new: {login, password} } } = state;
     return {
         login,
         password,
@@ -13,8 +13,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    changeLogin: event => dispatch(updateCurrentUser({login: event.currentTarget.value})),
-    changePassword: event => dispatch(updateCurrentUser({password: event.currentTarget.value})),
+    changeLogin: event => dispatch(updateNewUser({login: event.currentTarget.value})),
+    changePassword: event => dispatch(updateNewUser({password: event.currentTarget.value})),
     onSubmit: () => dispatch(authStart()),
 });
 
