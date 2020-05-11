@@ -26,7 +26,7 @@ class Topic {
         return TopicCollection.findOne({ title }, {'__v': false});
     }
 
-    static getByOwner(owner) {
+    static getByOwnerId(owner) {
         return TopicCollection.findOne({ owner }, {'__v': false});
     }
 
@@ -51,6 +51,26 @@ class Topic {
         );
     }
 
+    static updateById(id, fields) {
+        if (!_.size(fields)) {
+            return Promise.reject('Cannot update with no fields passed');
+        }
+
+        return TopicCollection.updateOne(
+            { _id: id },
+            { $set: {
+                ...fields,
+            }}
+        );
+    }
+
+    static deleteByTitle(title) {
+        return TopicCollection.findOneAndDelete({title});
+    }
+
+    static deleteById(id) {
+        return TopicCollection.findByIdAndDelete(id);
+    }
 }
 
 module.exports = Topic;

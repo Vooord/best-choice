@@ -2,69 +2,212 @@ const Topic = require('../models/topic');
 const User = require('../models/user');
 const Adviser = require('../models/adviser');
 
+const mongoose = require('mongoose');
+
+const _ = require('lodash');
+
 const {
-    DUPLICATE_ENTITY_STATUS, PERMISSION_DENIED_STATUS,
-    DUPLICATE_TOPIC_MESSAGE, OCCUPIED_TOPIC_MESSAGE, GROUP_ERROR_TOPIC_MESSAGE,
+    UNPROCESSABLE_ENTITY,
+    PERMISSION_DENIED,
+
+    OCCUPIED_TOPIC,
+    GROUP_ERROR_TOPIC,
+    INCORRECT_TOPIC_DATA,
+    INCORRECT_TOPIC_IDS_DATA,
+    SHOULD_BE_ADMIN,
 } = require('../constants/http');
+
+const {validateTopics} = require('../helpers/validators');
 
 
 class TopicController {
-    // ready
     static async add (req, res) {
-        const { title } = req.body;
-
-        if (await Topic.exists(title)) {
-            return res.status(DUPLICATE_ENTITY_STATUS).json({ message: DUPLICATE_TOPIC_MESSAGE });
+        const user = await User.getById(req.user.sub);
+        if (!user.isAdmin) {
+            return res.status(PERMISSION_DENIED).json({ message: SHOULD_BE_ADMIN });
         }
 
-        const {adviser, owner} = req.body;
+        if (req.body && Array.isArray(req.body)) {
+            const topics = req.body;
 
-        let adviserId = null;
-        if (adviser) {
-            adviserId = (await Adviser.getByUid(adviser))._id;
+            const {error} = await validateTopics(topics);
+            if (error) {
+                return res.status(error.status).json({ message: error.message });
+            }
+
+            const topicsResult = {};
+            for (const topic of topics) {
+                const {adviser: adviserUid, owner: ownerLogin} = topic;
+
+                let adviserId = null;
+                if (adviserUid) {
+                    const adviser = await Adviser.getByUid(adviserUid);
+                    if (!adviser) {
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Adviser "${adviserUid}" is not exists` });
+                    }
+                    adviserId = adviser._id;
+                }
+
+                let ownerId = null;
+                if (ownerLogin) {
+                    const owner = await User.getByLogin(ownerLogin);
+                    if (!owner) {
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Student "${ownerLogin}" is not exists` });
+                    }
+
+                    ownerId = owner._id;
+                }
+
+                const newTopic = await new Topic({
+                    ...topic,
+                    adviser: adviserId,
+                    owner: ownerId,
+                });
+
+                const id = newTopic._id;
+                topicsResult[id] = {
+                    ..._.omit(newTopic.toObject(), ['__v', '_id']),
+                    id,
+                    owner: ownerId && ownerLogin,
+                    adviser: adviserId && adviserUid,
+                };
+            }
+
+            return res.json(topicsResult);
         }
 
-        let ownerId = null;
-        if (owner) {
-            ownerId = (await User.getByLogin(owner))._id;
-        }
-
-        await new Topic({
-            ...req.body,
-            adviser: adviserId,
-            owner: ownerId,
-        });
-
-        return res.json({});
+        return res.status(UNPROCESSABLE_ENTITY).json({ message: INCORRECT_TOPIC_DATA });
     };
 
-    // ready
+
     static async occupy (req, res) {
-        const {title} = req.body;
-
         const user = await User.getById(req.user.sub);
-        const currentTopic = await Topic.getByOwner(user._id);
-        const updatedTopic = await Topic.getByTitle(title);
 
-        if (updatedTopic.owner && updatedTopic.owner !== user.login) {
-            return res.status(PERMISSION_DENIED_STATUS).json({ message: OCCUPIED_TOPIC_MESSAGE });
+        const {topicId} = req.body;
+        try {
+            if (!isNaN(topicId)) {
+                throw new Error('Topic id can not be a Number');
+            }
+            new mongoose.Types.ObjectId(topicId);
+        } catch (e) {
+            return res.status(UNPROCESSABLE_ENTITY).json({ message: `"${topicId}" is not a valid topic id` });
         }
 
-        if (user.group !== updatedTopic.group) {
-            return res.status(PERMISSION_DENIED_STATUS).json({ message: GROUP_ERROR_TOPIC_MESSAGE });
+        const currentTopic = await Topic.getByOwnerId(user._id);
+        const newTopic = await Topic.getById(topicId);
+
+        if (newTopic.owner && newTopic.owner !== user._id) {
+            return res.status(PERMISSION_DENIED).json({ message: OCCUPIED_TOPIC });
         }
 
-        await Topic.updateByTitle(title, {owner: user._id});
+        if (user.group !== newTopic.group) {
+            return res.status(PERMISSION_DENIED).json({ message: GROUP_ERROR_TOPIC });
+        }
+
         if (currentTopic) {
-            await Topic.updateByTitle(currentTopic.title, {owner: null});
+            await Topic.updateById(currentTopic._id, {owner: null});
         }
+        await Topic.updateById(topicId, {owner: user._id});
 
         return res.json({});
     }
 
-    // пока умеет только по группе
+
+    static async update(req, res) {
+        const user = await User.getById(req.user.sub);
+        if (!user.isAdmin) {
+            return res.status(PERMISSION_DENIED).json({ message: SHOULD_BE_ADMIN });
+        }
+
+        if (req.body && Array.isArray(req.body)) {
+            const {error} = await validateTopics(req.body.map(([id, topic]) => topic), {title: 0});
+            if (error) {
+                return res.status(error.status).json({ message: error.message });
+            }
+
+            for (const [id, fields] of req.body) {
+                const {owner, adviser, ...restFields} = fields;
+
+                if (owner) {
+                    const newOwner = await User.getByLogin(owner);
+                    if (!newOwner) {
+                        return res.status(UNPROCESSABLE_ENTITY).json({message: `Student "${owner}" is not exists`});
+                    }
+
+                    const newOwnersTopic = await Topic.getByOwnerId(newOwner._id);
+                    if (newOwnersTopic) {
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Student "${owner}" already has topic` });
+                    }
+
+                    restFields.owner = newOwner._id;
+                } else if (owner === '') {
+                    restFields.owner = null;
+                }
+
+                if (adviser) {
+                    const newAdviser = await Adviser.getByUid(adviser);
+                    if (newAdviser) {
+                        restFields.adviser = newAdviser._id;
+                    } else {
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Adviser "${adviser}" is not exists` });
+                    }
+                } else if (adviser === '') {
+                    restFields.adviser = null;
+                }
+
+                await Topic.updateById(id, restFields);
+            }
+            return res.json({});
+        }
+
+        return res.status(UNPROCESSABLE_ENTITY).json({ message: INCORRECT_TOPIC_DATA });
+    }
+
+
+    static async delete (req, res) {
+        const user = await User.getById(req.user.sub);
+        if (!user.isAdmin) {
+            return res.status(PERMISSION_DENIED).json({ message: SHOULD_BE_ADMIN });
+        }
+
+        if (req.body && Array.isArray(req.body)) {
+            const topicIds = req.body;
+            for (const topicId of topicIds) {
+                try {
+                    if (!isNaN(topicId)) {
+                        throw new Error('Topic id can not be a Number');
+                    }
+                    new mongoose.Types.ObjectId(topicId);
+                } catch (e) {
+                    return res.status(UNPROCESSABLE_ENTITY).json({ message: `"${topicId}" is not a valid topic id` });
+                }
+                await Topic.deleteById(topicId);
+            }
+
+            return res.json(topicIds);
+        }
+
+        return res.status(UNPROCESSABLE_ENTITY).json({ message: INCORRECT_TOPIC_IDS_DATA });
+    }
+
+
     static async getAll (req, res) {
-        const {group} = req.query;
+        const currentUser = await User.getById(req.user.sub);
+
+        const {isAdmin, group} = currentUser;
+
+        if (isAdmin) {
+            const populatedTopics = await Topic.populate(
+                await Topic.getAll(),
+                {path: 'owner', select: {'firstName': 1, 'lastName': 1, 'login': 1, '_id': 0}}
+            )
+                .then(ownerPopulatedTopics => Topic.populate(
+                    ownerPopulatedTopics,
+                    {path: 'adviser', select: {'firstName': 1, 'lastName': 1, 'midName': 1, 'uid':1, '_id': 0}}
+                ));
+
+            return res.json(populatedTopics);
+        }
 
         if (group) {
             const populatedTopics = await Topic.populate(

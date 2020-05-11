@@ -8,10 +8,10 @@ const User = require('../models/user');
 const Topic = require('../models/topic');
 
 const {
-    AUTH_ERROR_MESSAGE, UNAUTHORIZED_STATUS,
-    DUPLICATE_LOGIN_MESSAGE, DUPLICATE_ENTITY_STATUS,
-    NOT_FOUND_STATUS,
-    USER_NOT_FOUND_MESSAGE,
+    AUTH_ERROR, UNAUTHORIZED,
+    DUPLICATE_LOGIN, UNPROCESSABLE_ENTITY,
+    NOT_FOUND,
+    USER_NOT_FOUND,
 } = require('../constants/http');
 
 
@@ -28,14 +28,14 @@ class UserController {
             });
         }
 
-        return res.status(UNAUTHORIZED_STATUS).json({ message: AUTH_ERROR_MESSAGE });
+        return res.status(UNAUTHORIZED).json({ message: AUTH_ERROR });
     };
 
     static async register (req, res) {
         const { login } = req.body;
 
         if (await User.exists(login)) {
-            return res.status(DUPLICATE_ENTITY_STATUS).json({ message: DUPLICATE_LOGIN_MESSAGE });
+            return res.status(UNPROCESSABLE_ENTITY).json({ message: DUPLICATE_LOGIN });
         }
 
         await new User(req.body);
@@ -59,26 +59,26 @@ class UserController {
             return res.json(user);
         }
 
-        return res.status(NOT_FOUND_STATUS).json({ message: USER_NOT_FOUND_MESSAGE });
+        return res.status(NOT_FOUND).json({ message: USER_NOT_FOUND });
     };
 
     static async getCurrent (req, res) {
         const currentUser = await User.getById(req.user.sub);
         if (currentUser) {
-            const currentTopic = await Topic.getByOwner(currentUser._id);
+            const currentTopic = await Topic.getByOwnerId(currentUser._id);
             return res.json({
                 ...currentUser.toJSON(),
-                topic: (currentTopic && currentTopic.title) || null,
+                topic: (currentTopic && currentTopic._id) || null,
             });
         }
 
-        return res.status(NOT_FOUND_STATUS).json({ message: USER_NOT_FOUND_MESSAGE });
+        return res.status(NOT_FOUND).json({ message: USER_NOT_FOUND });
     }
 
     static async update (req, res) {
         const {login} = req.params;
         if (!await User.exists(login)) {
-            return res.status(NOT_FOUND_STATUS).json({ message: USER_NOT_FOUND_MESSAGE });
+            return res.status(NOT_FOUND).json({ message: USER_NOT_FOUND });
         }
 
         // поля которые 1) можно обновлять, 2) в тело передаются под тем же именем, что лежат в таблице
@@ -101,7 +101,7 @@ class UserController {
             await User.deleteByLogin(req.params.login);
             return res.json({});
         } catch(err) {
-            return res.status(NOT_FOUND_STATUS).json({ message: USER_NOT_FOUND_MESSAGE });
+            return res.status(NOT_FOUND).json({ message: USER_NOT_FOUND });
         }
     };
 }

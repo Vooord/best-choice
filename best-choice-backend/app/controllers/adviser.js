@@ -1,6 +1,6 @@
 const Adviser = require('../models/adviser');
 
-const {DUPLICATE_ENTITY_STATUS, DUPLICATE_ADVISER_MESSAGE} = require('../constants/http');
+const {UNPROCESSABLE_ENTITY} = require('../constants/http');
 
 
 class AdviserController {
@@ -8,7 +8,7 @@ class AdviserController {
         const { uid } = req.body;
 
         if (await Adviser.exists(uid)) {
-            return res.status(DUPLICATE_ENTITY_STATUS).json({ message: DUPLICATE_ADVISER_MESSAGE });
+            return res.status(UNPROCESSABLE_ENTITY).json({ message: `Adviser "${uid}" already exists` });
         }
 
         await new Adviser(req.body);
