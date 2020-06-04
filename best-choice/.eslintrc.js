@@ -49,6 +49,8 @@ module.exports = {
     'function-call-argument-newline': ["error", "consistent"],
     'function-paren-newline': ["error", "multiline-arguments"],
     'no-duplicate-imports': "error",
+    'array-element-newline': ["error", "consistent"],
+    
 
 
     // Ya-Market copy
