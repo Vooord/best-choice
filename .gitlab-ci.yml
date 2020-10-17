@@ -1,0 +1,72 @@
+stages:
+  - build
+  - testing
+  - staging
+  - ready to production
+  - production
+
+build:
+  stage: build
+  tags: [deploy]
+  script:
+    - echo "hello, World"
+
+test unit:
+  stage: testing
+  tags: [deploy]
+  script:
+    - echo "Testing..."
+    - echo "Testing done"
+
+test integration:
+  stage: testing
+  tags: [deploy]
+  script:
+    - echo "Integration is done"
+
+test selenium:
+  stage: testing
+  tags: [deploy]
+  script:
+    - echo "PASSED. (we are not testing front OMG)"
+
+.staging-deploy-hidden: &staging-deploy-anchor
+  stage: staging
+  tags: [deploy]
+  when: manual
+  before_script:
+    - echo "Starting staging deploy"
+  script:
+    - echo $CI_BUILD_NAME
+  after_script:
+    - echo "Staging deploy completed"
+
+deploy to stg1:
+  <<: *staging-deploy-anchor
+
+deploy to stg2:
+  <<: *staging-deploy-anchor
+
+approve:
+  stage: ready to production
+  tags: [deploy]
+  when: manual
+  script:
+    - mkdir -p .ci_status
+    - echo $(date +%s) > .ci_status/approved
+
+NOT approve:
+  stage: ready to production
+  tags: [deploy]
+  when: manual
+  script:
+    - mkdir -p .ci_status
+    - echo $(date +%s) > .ci_status/not_approved
+
+deploy to production:
+  stage: production
+  tags: [deploy]
+  when: manual
+  script:
+    - if [[ $(cat .ci_status/not_approved) > $(cat .ci_status/approved) ]]; then echo "Нужно разрешение от релиз-инженера"; exit 1; fi
+    - echo "Deployed to prod"
