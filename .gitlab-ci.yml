@@ -7,9 +7,10 @@ stages:
 
 build:
   stage: build
-  tags: [deploy]
+  tags: [gitlab-org]
   script:
     - echo "hello, World"
+    - echo "GDE YAN?????????!!!!"
 
 test unit:
   stage: testing
