@@ -18,7 +18,10 @@ build back:
   script:
     - echo "GDE YAN?????????!!!!"
     - cd best-choice-backend
-    - *build-npm
+    - apt-get update -y
+    - apt-get install npm -y
+    - npm install
+    - npm run build
     - cd -
 
 build front:
@@ -26,7 +29,10 @@ build front:
   tags: [gitlab-org]
   script:
     - cd best-choice
-    - *build-npm
+    - apt-get update -y
+    - apt-get install npm -y
+    - npm install
+    - npm run build
     - cd -
 
 test unit:
