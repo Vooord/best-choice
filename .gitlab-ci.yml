@@ -18,7 +18,7 @@ build back:
   script:
     - echo "GDE YAN?????????!!!!"
     - cd best-choice-backend
-    <<: *build-npm
+    - *build-npm
     - cd -
 
 build front:
@@ -26,7 +26,7 @@ build front:
   tags: [gitlab-org]
   script:
     - cd best-choice
-    <<: *build-npm
+    - *build-npm
     - cd -
 
 test unit:
