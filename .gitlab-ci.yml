@@ -12,7 +12,7 @@ lint back:
   script:
     - cd best-choice-backend
     - apt-get update -y
-    - apt-get install npm -g
+    - apt-get install npm -y
     - npm install eslint -g
     - eslint app/ index.js
 
@@ -22,7 +22,7 @@ lint front:
   script:
     - cd best-choice
     - apt-get update -y
-    - apt-get install npm -g
+    - apt-get install npm -y
     - npm install eslint -g
     - eslint src/ index.js
 
