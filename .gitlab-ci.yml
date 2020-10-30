@@ -14,26 +14,26 @@ build:
 
 test unit:
   stage: testing
-  tags: [deploy]
+  tags: [gitlab-org]
   script:
     - echo "Testing..."
     - echo "Testing done"
 
 test integration:
   stage: testing
-  tags: [deploy]
+  tags: [gitlab-org]
   script:
     - echo "Integration is done"
 
 test selenium:
   stage: testing
-  tags: [deploy]
+  tags: [gitlab-org]
   script:
     - echo "PASSED. (we are not testing front OMG)"
 
 .staging-deploy-hidden: &staging-deploy-anchor
   stage: staging
-  tags: [deploy]
+  tags: [gitlab-org]
   when: manual
   before_script:
     - echo "Starting staging deploy"
@@ -50,7 +50,7 @@ deploy to stg2:
 
 approve:
   stage: ready to production
-  tags: [deploy]
+  tags: [gitlab-org]
   when: manual
   script:
     - mkdir -p .ci_status
@@ -58,7 +58,7 @@ approve:
 
 NOT approve:
   stage: ready to production
-  tags: [deploy]
+  tags: [gitlab-org]
   when: manual
   script:
     - mkdir -p .ci_status
@@ -66,7 +66,7 @@ NOT approve:
 
 deploy to production:
   stage: production
-  tags: [deploy]
+  tags: [gitlab-org]
   when: manual
   script:
     - if [[ $(cat .ci_status/not_approved) > $(cat .ci_status/approved) ]]; then echo "Нужно разрешение от релиз-инженера"; exit 1; fi
