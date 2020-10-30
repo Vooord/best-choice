@@ -16,8 +16,8 @@ build front:
   stage: build
   tags: [gitlab-org]
   script:
-    - apt-get update
-    - apt-get install npm
+    - apt-get update -y
+    - apt-get install npm -y
     - cd best-choice
     - npm install
     - npm build
