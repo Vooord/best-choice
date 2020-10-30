@@ -1,16 +1,30 @@
 stages:
   - build
+  - lint
   - testing
   - staging
   - ready to production
   - production
 
-.build-npm: &build-npm
+lint back:
+  stage: link
+  tags: [gitlab-org]
   script:
+    - cd best-choice-backend
     - apt-get update -y
-    - apt-get install npm -y
-    - npm install
-    - npm run build
+    - apt-get install npm -g
+    - npm install eslint -g
+    - eslint app/ index.js
+
+lint front:
+  stage: link
+  tags: [gitlab-org]
+  script:
+    - cd best-choice
+    - apt-get update -y
+    - apt-get install npm -g
+    - npm install eslint -g
+    - eslint src/ index.js
 
 build back:
   stage: build
@@ -20,8 +34,6 @@ build back:
     - cd best-choice-backend
     - apt-get update -y
     - apt-get install npm -y
-    - npm install
-    - npm run build
     - cd -
 
 build front:
