@@ -7,7 +7,7 @@ stages:
   - production
 
 lint back:
-  stage: link
+  stage: lint
   tags: [gitlab-org]
   script:
     - cd best-choice-backend
@@ -17,7 +17,7 @@ lint back:
     - eslint app/ index.js
 
 lint front:
-  stage: link
+  stage: lint
   tags: [gitlab-org]
   script:
     - cd best-choice
