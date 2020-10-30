@@ -5,22 +5,28 @@ stages:
   - ready to production
   - production
 
+.build-npm: &build-npm
+  script:
+    - apt-get update -y
+    - apt-get install npm -y
+    - npm install
+    - npm run build
+
 build back:
   stage: build
   tags: [gitlab-org]
   script:
-    - echo "hello, World"
     - echo "GDE YAN?????????!!!!"
+    - cd best-choice-backend
+    <<: *build-npm
+    - cd -
 
 build front:
   stage: build
   tags: [gitlab-org]
   script:
-    - apt-get update -y
-    - apt-get install npm -y
     - cd best-choice
-    - npm install
-    - npm build
+    <<: *build-npm
     - cd -
 
 test unit:
