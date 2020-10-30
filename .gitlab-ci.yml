@@ -23,6 +23,7 @@ lint front:
     - cd best-choice
     - apt-get update -y
     - apt-get install npm -y
+    - npm install
     - npm install eslint -g
     - eslint src/ index.js
 
