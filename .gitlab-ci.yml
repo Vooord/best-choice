@@ -5,12 +5,21 @@ stages:
   - ready to production
   - production
 
-build:
+build back:
   stage: build
   tags: [gitlab-org]
   script:
     - echo "hello, World"
     - echo "GDE YAN?????????!!!!"
+
+build front:
+  stage: build
+  tags: [gitlab-org]
+  script:
+    - cd best-choice
+    - npm install
+    - npm build
+    - cd -
 
 test unit:
   stage: testing
