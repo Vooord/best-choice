@@ -8,22 +8,22 @@ stages:
 build:
   stage: build
   tags: [gitlab-org]
-  before-script:
+  before_script:
     - echo "Building static web page"
     - cd /usr/src/app/best-choice
   script:
     - npm run build
-  after-script:
+  after_script:
     - cd -
     - echo "Build done"
 
 test front:
   stage: testing
   tags: [gitlab-org]
-  before-script:
+  before_script:
     - echo "Testing..."
     - cd /usr/src/app/best-choice
-  after-script:
+  after_script:
     - cd -
     - echo "Testing done"
   script:
