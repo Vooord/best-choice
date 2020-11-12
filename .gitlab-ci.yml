@@ -8,28 +8,26 @@ stages:
 build:
   stage: build
   tags: [gitlab-org]
+  before-script:
+    - echo "Building static web page"
+    - cd /usr/src/app/best-choice
   script:
-    - echo "hello, World"
-    - echo "GDE YAN?????????!!!!"
+    - npm run build
+  after-script:
+    - cd -
+    - echo "Build done"
 
-test unit:
+test front:
   stage: testing
   tags: [gitlab-org]
-  script:
+  before-script:
     - echo "Testing..."
+    - cd /usr/src/app/best-choice
+  after-script:
+    - cd -
     - echo "Testing done"
-
-test integration:
-  stage: testing
-  tags: [gitlab-org]
   script:
-    - echo "Integration is done"
-
-test selenium:
-  stage: testing
-  tags: [gitlab-org]
-  script:
-    - echo "PASSED. (we are not testing front OMG)"
+    - npm run test
 
 .staging-deploy-hidden: &staging-deploy-anchor
   stage: staging
