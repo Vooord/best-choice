@@ -54,7 +54,7 @@ lint front:
     - npm install eslint -g
     - eslint src/
 
-test front:
+.test front:
   stage: test
   tags: [gitlab-org]
   before_script:
