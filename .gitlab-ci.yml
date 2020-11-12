@@ -18,7 +18,6 @@ build:
     - apt-get install npm -y
   script:
     - npm install
-    - npm audit fix
     - npm run build
   after_script:
     - cd -
