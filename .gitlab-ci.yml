@@ -48,7 +48,7 @@ lint front:
     - apt-get install npm -y
   after_script:
     - cd -
-    - rcho "Linting done"
+    - echo "Linting done"
   script:
     - npm install eslint -g
     - eslint src/
