@@ -10,7 +10,7 @@ build:
   stage: build
   tags: [gitlab-org]
   before_script:
-    - echo "Building static web page"
+    - echo "Building static web page..."
     # - mkdir -p /usr/src/app
     # - cp -r ./ /usr/src/app/
     - cd best-choice
@@ -27,12 +27,14 @@ lint back:
   stage: lint
   tags: [gitlab-org]
   before_script:
+    - echo "Linting..."
     - cd best-choice-backend
     - apt-get update -y
     - apt-get install npm -y
     - npm install eslint -g
   after_script:
     - cd -
+    - echo "Linting done"
   script:
     - eslint app/ index.js
 
@@ -40,6 +42,7 @@ lint front:
   stage: lint
   tags: [gitlab-org]
   before_script:
+    - echo "Linting..."
     - cd best-choice
     - apt-get update -y
     - apt-get install npm -y
@@ -47,6 +50,7 @@ lint front:
     - npm install eslint -g
   after_script:
     - cd -
+    - rcho "Linting done"
   script:
     - eslint src/
 
@@ -56,6 +60,8 @@ test front:
   before_script:
     - echo "Testing..."
     - cd best-choice
+    - apt-get update -y
+    - apt-get install npm -y
   after_script:
     - cd -
     - echo "Testing done"
