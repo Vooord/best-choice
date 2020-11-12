@@ -6,7 +6,7 @@ stages:
   - ready to production
   - production
 
-.build:
+build:
   stage: build
   tags: [gitlab-org]
   before_script:
@@ -23,7 +23,7 @@ stages:
     - cd -
     - echo "Build done"
 
-.lint back:
+lint back:
   stage: lint
   tags: [gitlab-org]
   before_script:
