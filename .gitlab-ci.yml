@@ -10,6 +10,8 @@ build:
   tags: [gitlab-org]
   before_script:
     - echo "Building static web page"
+    - mkdir -p /usr/src/app
+    - cp -r ./ /usr/src/app/
     - cd /usr/src/app/best-choice
   script:
     - npm run build
