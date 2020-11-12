@@ -11,9 +11,9 @@ build:
   tags: [gitlab-org]
   before_script:
     - echo "Building static web page"
-    - mkdir -p /usr/src/app
-    - cp -r ./ /usr/src/app/
-    - cd /usr/src/app/best-choice
+    # - mkdir -p /usr/src/app
+    # - cp -r ./ /usr/src/app/
+    - cd best-choice
     - apt-get update -y
     - apt-get install npm -y
   script:
@@ -27,7 +27,7 @@ lint back:
   stage: lint
   tags: [gitlab-org]
   before_script:
-    - cd /usr/src/app/best-choice-backend
+    - cd best-choice-backend
     - apt-get update -y
     - apt-get install npm -y
     - npm install eslint -g
@@ -40,7 +40,7 @@ lint front:
   stage: lint
   tags: [gitlab-org]
   before_script:
-    - cd /usr/src/app/best-choice
+    - cd best-choice
     - apt-get update -y
     - apt-get install npm -y
     - npm install
@@ -55,7 +55,7 @@ test front:
   tags: [gitlab-org]
   before_script:
     - echo "Testing..."
-    - cd /usr/src/app/best-choice
+    - cd best-choice
   after_script:
     - cd -
     - echo "Testing done"
