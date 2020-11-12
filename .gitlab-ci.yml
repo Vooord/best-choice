@@ -6,7 +6,7 @@ stages:
   - ready to production
   - production
 
-build:
+.build:
   stage: build
   tags: [gitlab-org]
   before_script:
@@ -23,7 +23,7 @@ build:
     - cd -
     - echo "Build done"
 
-lint back:
+.lint back:
   stage: lint
   tags: [gitlab-org]
   before_script:
@@ -50,6 +50,7 @@ lint front:
     - cd -
     - echo "Linting done"
   script:
+    - npm install
     - npm install eslint -g
     - eslint src/
 
