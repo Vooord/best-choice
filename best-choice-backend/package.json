@@ -20,7 +20,7 @@
     "lodash": "latest"
   },
   "devDependencies": {
-    "express-jwt": "^5.3.3",
+    "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.6"
   }
