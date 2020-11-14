@@ -8,7 +8,7 @@ stages:
 
 build:
   stage: build
-  tags: [docker]
+  tags: [gitlab-org]
   before_script:
     - echo "Building static web page..."
     # - mkdir -p /usr/src/app
@@ -25,7 +25,7 @@ build:
 
 lint back:
   stage: lint
-  tags: [docker]
+  tags: [gitlab-org]
   before_script:
     - echo "Linting..."
     - cd best-choice-backend
@@ -40,7 +40,7 @@ lint back:
 
 lint front:
   stage: lint
-  tags: [docker]
+  tags: [gitlab-org]
   before_script:
     - echo "Linting..."
     - cd best-choice
@@ -56,7 +56,7 @@ lint front:
 
 .test front:
   stage: test
-  tags: [docker]
+  tags: [gitlab-org]
   before_script:
     - echo "Testing..."
     - cd best-choice
@@ -70,7 +70,7 @@ lint front:
 
 .staging-deploy-hidden: &staging-deploy-anchor
   stage: staging
-  tags: [docker]
+  tags: [gitlab-org]
   when: manual
   before_script:
     - echo "Starting staging deploy"
@@ -87,7 +87,7 @@ deploy to stg2:
 
 approve:
   stage: ready to production
-  tags: [docker]
+  tags: [gitlab-org]
   when: manual
   script:
     - mkdir -p .ci_status
@@ -95,7 +95,7 @@ approve:
 
 NOT approve:
   stage: ready to production
-  tags: [docker]
+  tags: [gitlab-org]
   when: manual
   script:
     - mkdir -p .ci_status
@@ -103,7 +103,7 @@ NOT approve:
 
 deploy to production:
   stage: production
-  tags: [docker]
+  tags: [gitlab-org]
   when: manual
   script:
     - if [[ $(cat .ci_status/not_approved) > $(cat .ci_status/approved) ]]; then echo "Нужно разрешение от релиз-инженера"; exit 1; fi
