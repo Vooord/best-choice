@@ -46,7 +46,7 @@ const text = {
     REGISTER_REDIRECT: 'Еще нет аакуанта? Зарегестрируйтесь',
 };
 
-function AuthPage(props) {
+export default function AuthPage(props) {
     const {
         login, password,
         changeLogin, changePassword,
@@ -119,5 +119,3 @@ function AuthPage(props) {
             </Container>
     );
 }
-
-export default AuthPage;
