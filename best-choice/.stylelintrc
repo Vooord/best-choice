@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-css-modules",
+  ],
+  "plugins": [
+    "stylelint-no-unsupported-browser-features",
+    "stylelint-media-use-custom-media",
+    "stylelint-order",
+    "stylelint-config-rational-order/plugin",
+    "stylelint-declaration-use-variable",
+  ],
+  "rules": {
+    "csstools/media-use-custom-media": "always",
+    "indentation": "tab",
+
+    "declaration-empty-line-before": null,
+
+    "plugin/no-unsupported-browser-features": [true, {
+      "severity": "warning"
+    }],
+    "order/properties-order": [],
+    "plugin/rational-order": [true, {
+      "empty-line-between-groups": true
+    }],
+    "sh-waqar/declaration-use-variable": [
+      "z-index"
+    ]
+  }
+}
