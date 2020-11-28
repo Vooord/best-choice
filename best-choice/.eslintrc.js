@@ -28,6 +28,10 @@ module.exports = {
     },
   },
   'rules': {
+    "react/jsx-filename-extension": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-indent-props": "off",
+    "react/jsx-props-no-spreading": "off",
     // mine
     "indent": ["error", 4, {SwitchCase: 1}],
     "import/prefer-default-export": "off",

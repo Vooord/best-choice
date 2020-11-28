@@ -7,8 +7,7 @@ import {
 } from '../actions/topic';
 
 import Immutable from 'seamless-immutable';
-import {fromPairs, omit} from 'lodash';
-
+import { fromPairs, omit } from 'lodash';
 
 const topicReducer = (state = {}, { type, payload }) => {
     switch (type) {
@@ -25,11 +24,11 @@ const topicReducer = (state = {}, { type, payload }) => {
         }
 
         case TOPICS_UPDATE_SUCCESS: {
-            return Immutable.merge(state, fromPairs(payload), {deep: true});
+            return Immutable.merge(state, fromPairs(payload), { deep: true });
         }
 
         case OCCUPY_TOPIC_SUCCESS: {
-            const {user, topicId: newTopicId} = payload;
+            const { user, topicId: newTopicId } = payload;
             const currentTopicId = user.topic;
             const fullName = [user.firstName, user.lastName].join(' ');
 
@@ -44,7 +43,7 @@ const topicReducer = (state = {}, { type, payload }) => {
                 },
             };
 
-            return Immutable.merge(state, newTopicState, {deep: true});
+            return Immutable.merge(state, newTopicState, { deep: true });
         }
 
         default: {
