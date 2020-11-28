@@ -9,6 +9,7 @@ import {
     actualizeUserSuccess, actualizeUserFail,
     updateCurrentUser,
 } from '../actions/user';
+import { toast } from 'react-toastify';
 
 
 const actualizeUserEpic = (action$, state) =>
@@ -33,7 +34,7 @@ const actualizeUserEpic = (action$, state) =>
                 catchError(errPromise => from(errPromise)
                     .pipe(
                         mergeMap(err => {
-                            toast.erroralert(err.message);
+                            toast.error(err.message);
                             return of(actualizeUserFail(err));
                         })
                     ))
