@@ -4,7 +4,7 @@ import {mergeMap, catchError} from 'rxjs/operators';
 import {EMPTY, from, of} from 'rxjs';
 
 import history from '../routes/history';
-import { toast } from 'react-toastify';
+import { Flip, toast } from 'react-toastify';
 
 
 const onRegisterStartEpic = (action$, state) =>
@@ -43,7 +43,7 @@ const onRegisterSuccessEpic = action$ =>
     action$.pipe(
         ofType(REGISTER_SUCCESS),
         mergeMap(() => {
-            toast.success('Вы успешно зарегистрированы');
+            toast.success('Вы успешно зарегистрированы', {transition: Flip, position: 'top-center'});
             history.push('/auth');
             return EMPTY;
         })

@@ -19,7 +19,7 @@ const MainRouter = props => {
                 <PrivateRoute path="/" component={MainTableSwitcher} />
                 <Redirect from="*" to="/" />
             </Switch>
-            <ToastContainer position={'top-center'} />
+            <ToastContainer position={'top-right'} />
         </ConnectedRouter>
     );
 };
