@@ -37,7 +37,7 @@ const validateTopics = async (topics, customOptions = {}) => {
         }
 
         if (options.exists && title && await Topic.exists(title)) {
-            return { error: { status: UNPROCESSABLE_ENTITY, message: `Topic "${title}" already exists` } };
+            return { error: { status: UNPROCESSABLE_ENTITY, message: `Топик "${title}" уже существует` } };
         }
     }
     return {error: false};

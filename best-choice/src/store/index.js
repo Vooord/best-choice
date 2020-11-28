@@ -1,20 +1,18 @@
-import {combineReducers, createStore, applyMiddleware} from 'redux';
-import {composeWithDevTools} from 'redux-devtools-extension';
-import {connectRouter, routerMiddleware} from 'connected-react-router';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 // import logger from 'redux-logger';
 
 import reducers from '../reducers';
 import history from '../routes/history';
 
-import {createEpicMiddleware} from 'redux-observable';
+import { createEpicMiddleware } from 'redux-observable';
 import rootEpic from '../epics';
-
 
 const rootReducers = combineReducers({
     ...reducers,
     router: connectRouter(history),
 });
-
 
 const epicMiddleware = createEpicMiddleware();
 

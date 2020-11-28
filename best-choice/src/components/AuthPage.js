@@ -12,9 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import {Link, Redirect} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Copyright from './CopyRight';
-
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -43,7 +42,7 @@ const label = {
 
 const text = {
     SIGN_IN: 'Войти',
-    REGISTER_REDIRECT: 'Еще нет аакуанта? Зарегестрируйтесь',
+    REGISTER_REDIRECT: 'Еще нет аккаунта? Зарегистрируйтесь',
 };
 
 export default function AuthPage(props) {
@@ -61,61 +60,65 @@ export default function AuthPage(props) {
     const classes = useStyles();
 
     return (
-        localStorage.getItem('token') ?
-            <Redirect to={{ pathname: '/', state: { from: '/auth' } }} />
-            :
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <form className={classes.form} onSubmit={onSubmit}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            label={label.LOGIN}
-                            value={login || ''}
-                            onChange={changeLogin}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            label={label.PASSWORD}
-                            type="password"
-                            value={password || ''}
-                            onChange={changePassword}
-                        />
-                        {/*<FormControlLabel*/}
-                        {/*    control={<Checkbox value="remember" color="primary" />}*/}
-                        {/*    label="Remember me"*/}
-                        {/*/>*/}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >{text.SIGN_IN}</Button>
-                        <Grid container  justify="flex-end">
-                            {/*<Grid item xs>*/}
-                            {/*    <Link href="#" variant="body2">*/}
-                            {/*        Forgot password?*/}
-                            {/*    </Link>*/}
-                            {/*</Grid>*/}
-                            <Grid item>
-                                <Link to="/register">{text.REGISTER_REDIRECT}</Link>
+        localStorage.getItem('token')
+            ? <Redirect to={{ pathname: '/', state: { from: '/auth' } }} />
+            : (
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <div className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <form className={classes.form} onSubmit={onSubmit}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                label={label.LOGIN}
+                                value={login || ''}
+                                onChange={changeLogin}
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                label={label.PASSWORD}
+                                type="password"
+                                value={password || ''}
+                                onChange={changePassword}
+                            />
+                            {/* <FormControlLabel */}
+                            {/*    control={<Checkbox value="remember" color="primary" />} */}
+                            {/*    label="Remember me" */}
+                            {/* /> */}
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                {text.SIGN_IN}
+
+                            </Button>
+                            <Grid container justify="flex-end">
+                                {/* <Grid item xs> */}
+                                {/*    <Link href="#" variant="body2"> */}
+                                {/*        Forgot password? */}
+                                {/*    </Link> */}
+                                {/* </Grid> */}
+                                <Grid item>
+                                    <Link to="/register">{text.REGISTER_REDIRECT}</Link>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </form>
-                </div>
-                <Box mt={8}>
-                    <Copyright />
-                </Box>
-            </Container>
+                        </form>
+                    </div>
+                    <Box mt={8}>
+                        <Copyright />
+                    </Box>
+                </Container>
+            )
     );
 }

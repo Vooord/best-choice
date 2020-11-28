@@ -4,6 +4,7 @@ module.exports = {
     'es6': true,
   },
   'extends': [
+    "airbnb",
     'plugin:react/recommended',
   ],
   'globals': {
@@ -20,7 +21,17 @@ module.exports = {
   'plugins': [
     'react',
   ],
+  "ignorePatterns": ["node_modules/"],
+  "settings": {
+    "react": {
+      "version": "16.13.1"
+    },
+  },
   'rules': {
+    "react/jsx-filename-extension": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-indent-props": "off",
+    "react/jsx-props-no-spreading": "off",
     // mine
     "indent": ["error", 4, {SwitchCase: 1}],
     "import/prefer-default-export": "off",
@@ -50,8 +61,6 @@ module.exports = {
     'function-paren-newline': ["error", "multiline-arguments"],
     'no-duplicate-imports': "error",
     'array-element-newline': ["error", "consistent"],
-    
-
 
     // Ya-Market copy
     'react/prop-types': 'off',

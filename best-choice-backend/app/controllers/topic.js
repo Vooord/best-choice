@@ -9,12 +9,12 @@ const _ = require('lodash');
 const {
     UNPROCESSABLE_ENTITY,
     PERMISSION_DENIED,
-
     OCCUPIED_TOPIC,
     GROUP_ERROR_TOPIC,
     INCORRECT_TOPIC_DATA,
     INCORRECT_TOPIC_IDS_DATA,
     SHOULD_BE_ADMIN,
+    TOPIC_ID_CANNOT_BE_NUMBER,
 } = require('../constants/http');
 
 const {validateTopics} = require('../helpers/validators');
@@ -43,7 +43,7 @@ class TopicController {
                 if (adviserUid) {
                     const adviser = await Adviser.getByUid(adviserUid);
                     if (!adviser) {
-                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Adviser "${adviserUid}" is not exists` });
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Научный руководитель "${adviserUid}" не существует` });
                     }
                     adviserId = adviser._id;
                 }
@@ -52,7 +52,7 @@ class TopicController {
                 if (ownerLogin) {
                     const owner = await User.getByLogin(ownerLogin);
                     if (!owner) {
-                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Student "${ownerLogin}" is not exists` });
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Студент "${ownerLogin}" не существует` });
                     }
 
                     ownerId = owner._id;
@@ -86,11 +86,11 @@ class TopicController {
         const {topicId} = req.body;
         try {
             if (!isNaN(topicId)) {
-                throw new Error('Topic id can not be a Number');
+                throw new Error(TOPIC_ID_CANNOT_BE_NUMBER);
             }
             new mongoose.Types.ObjectId(topicId);
         } catch (e) {
-            return res.status(UNPROCESSABLE_ENTITY).json({ message: `"${topicId}" is not a valid topic id` });
+            return res.status(UNPROCESSABLE_ENTITY).json({ message: `"${topicId}" не является верным ID топика` });
         }
 
         const currentTopic = await Topic.getByOwnerId(user._id);
@@ -131,12 +131,12 @@ class TopicController {
                 if (owner) {
                     const newOwner = await User.getByLogin(owner);
                     if (!newOwner) {
-                        return res.status(UNPROCESSABLE_ENTITY).json({message: `Student "${owner}" is not exists`});
+                        return res.status(UNPROCESSABLE_ENTITY).json({message: `Студент "${owner}" не существует`});
                     }
 
-                    const newOwnersTopic = await Topic.getByOwnerId(newOwner._id);
-                    if (newOwnersTopic) {
-                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Student "${owner}" already has topic` });
+                    const topicOfANewOwner = await Topic.getByOwnerId(newOwner._id);
+                    if (topicOfANewOwner) {
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Топик "${topicOfANewOwner.title}" уже привязан к студенту "${owner}"` });
                     }
 
                     restFields.owner = newOwner._id;
@@ -149,7 +149,7 @@ class TopicController {
                     if (newAdviser) {
                         restFields.adviser = newAdviser._id;
                     } else {
-                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Adviser "${adviser}" is not exists` });
+                        return res.status(UNPROCESSABLE_ENTITY).json({ message: `Научный руководитель "${adviser}" не существует` });
                     }
                 } else if (adviser === '') {
                     restFields.adviser = null;
@@ -175,11 +175,11 @@ class TopicController {
             for (const topicId of topicIds) {
                 try {
                     if (!isNaN(topicId)) {
-                        throw new Error('Topic id can not be a Number');
+                        throw new Error(TOPIC_ID_CANNOT_BE_NUMBER);
                     }
                     new mongoose.Types.ObjectId(topicId);
                 } catch (e) {
-                    return res.status(UNPROCESSABLE_ENTITY).json({ message: `"${topicId}" is not a valid topic id` });
+                    return res.status(UNPROCESSABLE_ENTITY).json({ message: `"${topicId}" не является верным ID топика` });
                 }
                 await Topic.deleteById(topicId);
             }

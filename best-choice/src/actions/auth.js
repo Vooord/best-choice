@@ -1,9 +1,8 @@
-import {createAction} from '../helpers/actions';
+import { createAction } from '../helpers/actions';
 
 export const AUTH_START = 'auth/AUTH_START';
 export const AUTH_SUCCESS = 'auth/AUTH_SUCCESS';
 export const AUTH_FAIL = 'auth/AUTH_FAIL';
-
 
 export const {
     [AUTH_START]: authStart,

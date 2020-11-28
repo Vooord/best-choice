@@ -11,9 +11,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import {Link, Redirect} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Copyright from './CopyRight';
-
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -35,7 +34,6 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
 const label = {
     FIRST_NAME: 'Имя',
     SECOND_NAME: 'Фамилия',
@@ -56,7 +54,6 @@ function SignUp(props) {
         onSubmit: onSubmitDispatch,
     } = props;
 
-
     const onSubmit = event => {
         event.preventDefault();
         return onSubmitDispatch();
@@ -64,97 +61,82 @@ function SignUp(props) {
     const classes = useStyles();
 
     return (
-        localStorage.getItem('token') ?
-            <Redirect to={{ pathname: '/', state: { from: '/register' } }} />
-            :
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <form className={classes.form} onSubmit={onSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label={label.FIRST_NAME}
-                                    value={firstName || ''}
-                                    onChange={changeFirstName}
-                                // autoFocus
-                                />
+        localStorage.getItem('token')
+            ? <Redirect to={{ pathname: '/', state: { from: '/register' } }} />
+            : (
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <div className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <form className={classes.form} onSubmit={onSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        label={label.FIRST_NAME}
+                                        value={firstName || ''}
+                                        onChange={changeFirstName}
+                                        // autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        label={label.SECOND_NAME}
+                                        value={lastName || ''}
+                                        onChange={changeLastName}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        label={label.LOGIN}
+                                        value={login || ''}
+                                        onChange={changeLogin}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        label={label.PASSWORD}
+                                        type="password"
+                                        value={password || ''}
+                                        onChange={changePassword}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label={label.SECOND_NAME}
-                                    value={lastName || ''}
-                                    onChange={changeLastName}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label={label.LOGIN}
-                                    value={login || ''}
-                                    onChange={changeLogin}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label={label.PASSWORD}
-                                    type="password"
-                                    value={password || ''}
-                                    onChange={changePassword}
-                                />
-                            </Grid>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                {text.REGISTER}
 
-                            {/*<Grid item xs={12}>*/}
-                            {/*    <TextField*/}
-                            {/*        variant="outlined"*/}
-                            {/*        required*/}
-                            {/*        fullWidth*/}
-                            {/*        label={label.CONFIRM_PASSWORD}*/}
-                            {/*        type="password"*/}
-                            {/*        value={}*/}
-                            {/*        onChange={changePassword}*/}
-                            {/*    />*/}
-                            {/*</Grid>*/}
-
-                            {/*<Grid item xs={12}>*/}
-                            {/*    <FormControlLabel*/}
-                            {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
-                            {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
-                            {/*    />*/}
-                            {/*</Grid>*/}
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >{text.REGISTER}</Button>
-                        <Grid container justify="flex-end">
-                            <Grid item>
-                                <Link to="/auth">{text.AUTH_REDIRECT}</Link>
+                            </Button>
+                            <Grid container justify="flex-end">
+                                <Grid item>
+                                    <Link to="/auth">{text.AUTH_REDIRECT}</Link>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </form>
-                </div>
-                <Box mt={8}>
-                    <Copyright />
-                </Box>
-            </Container>
+                        </form>
+                    </div>
+                    <Box mt={8}>
+                        <Copyright />
+                    </Box>
+                </Container>
+            )
     );
 }
 

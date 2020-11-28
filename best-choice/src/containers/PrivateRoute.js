@@ -1,22 +1,20 @@
 import React from 'react';
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PrivateRouteComponent from '../components/PrivateRoute';
 
-import {actualizeUser} from '../actions/user';
+import { actualizeUser } from '../actions/user';
 import PropTypes from 'prop-types';
 
-
 const PrivateRoute = props => {
-    const {actualizeCurrentUser, ...restProps} = props;
+    const { actualizeCurrentUser, ...restProps } = props;
     actualizeCurrentUser();
 
-    return <PrivateRouteComponent {...restProps}/>;
+    return <PrivateRouteComponent {...restProps} />;
 };
 
-
 PrivateRoute.propTypes = {
-    actualizeCurrentUser: PropTypes.func,
+    actualizeCurrentUser: PropTypes.func, // eslint-disable-line
 };
 
 const mapDispatchToProps = dispatch => ({

@@ -12,8 +12,9 @@ import Button from '@material-ui/core/Button';
 
 import LogoutButton from '../containers/LogoutButton';
 
-import {omit, pick, keys, entries} from 'lodash';
-
+import {
+    omit, pick, keys, entries,
+} from 'lodash';
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -31,7 +32,6 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
 const headers = {
     title: 'Тема',
     adviser: 'Научрук',
@@ -40,7 +40,7 @@ const headers = {
 };
 
 const StudentMainTable = props => {
-    const {topics, onOccupyButtonClick} = props;
+    const { topics, onOccupyButtonClick } = props;
     const classes = useStyles();
 
     return (
@@ -48,36 +48,51 @@ const StudentMainTable = props => {
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        {entries(headers).map(([id, name]) =>
+                        {entries(headers).map(([id, name]) => (
                             <TableCell
                                 key={id}
                                 id={id}
                                 className={classes.headCell}
                                 align={(id === 'title' && 'left') || (id === 'owner' && 'center') || 'right'}
-                            >{name}</TableCell>)}
+                            >
+                                {name}
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {topics.map(topic => (
                         <TableRow key={topic.title} className={classes.tableRow}>
                             <TableCell component="th" scope="row" className={classes.bodyCell}>{topic.title}</TableCell>
-                            {entries(omit(pick(topic, keys(headers)), ['title', 'owner'])).map(([k, v]) =>
+                            {entries(omit(pick(topic, keys(headers)), ['title', 'owner'])).map(([k, v]) => (
                                 <TableCell
                                     key={k}
                                     className={classes.bodyCell}
-                                    align={'right'}
-                                >{v}</TableCell>)
-                            }
-                            <TableCell className={`${classes.bodyCell} ${classes.buttonCell}`} align={'center'}>{
-                                topic.owner ||
-                                <Button size="small" variant="outlined" onClick={() => onOccupyButtonClick(topic.id)}
-                                >{'Занять'}</Button>
-                            }</TableCell>
+                                    align="right"
+                                >
+                                    {v}
+                                </TableCell>
+                            ))}
+                            <TableCell className={`${classes.bodyCell} ${classes.buttonCell}`} align="center">
+                                {
+                                    topic.owner
+                                || (
+                                    <Button
+                                        size="small"
+                                        variant="outlined"
+                                        onClick={() => onOccupyButtonClick(topic.id)}
+                                    >
+                                        Занять
+                                    </Button>
+                                )
+                                }
+
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <LogoutButton/>
+            <LogoutButton />
         </TableContainer>
     );
 };

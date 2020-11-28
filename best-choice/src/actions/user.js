@@ -1,4 +1,4 @@
-import {createAction} from '../helpers/actions';
+import { createAction } from '../helpers/actions';
 
 export const CURRENT_USER_SET = 'user/CURRENT_USER_SET';
 export const CURRENT_USER_UPDATE = 'user/CURRENT_USER_UPDATE';

@@ -1,10 +1,8 @@
-import {createAction} from '../helpers/actions';
-
+import { createAction } from '../helpers/actions';
 
 export const REGISTER_START = 'register/REGISTER_START';
 export const REGISTER_SUCCESS = 'register/REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'register/REGISTER_FAIL';
-
 
 export const {
     [REGISTER_START]: registerStart,

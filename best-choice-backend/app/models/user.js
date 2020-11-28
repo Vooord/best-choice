@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
+const {NO_UPDATE_FIELDS_PASSED} = require('../constants/http');
 
 const {UserCollection} = require('../config/schema');
 
@@ -36,7 +37,7 @@ class User {
 
     static updateByLogin(login, fields) {
         if (!_.size(fields)) {
-            return Promise.reject('Cannot update with no fields passed');
+            return Promise.reject(NO_UPDATE_FIELDS_PASSED);
         }
 
         return UserCollection.updateOne(

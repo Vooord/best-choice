@@ -1,8 +1,7 @@
 import React from 'react';
 
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-
 
 const useStyles = makeStyles(theme => ({
     wrapper: {
@@ -13,13 +12,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LogoutButton = props => {
-    const {onClick} = props;
+    const { onClick } = props;
     const classes = useStyles();
 
     return (
         <div className={classes.wrapper}>
             <IconButton color="secondary" onClick={onClick}>
-                {'Выйти'}
+                Выйти
             </IconButton>
         </div>
     );

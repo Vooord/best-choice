@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {EditingState} from '@devexpress/dx-react-grid';
+import { EditingState } from '@devexpress/dx-react-grid';
 import {
     Grid,
     Table,
@@ -17,15 +17,12 @@ import AddIcon from '@material-ui/icons/NoteAddTwoTone';
 import SaveIcon from '@material-ui/icons/SaveTwoTone';
 import CancelIcon from '@material-ui/icons/CancelTwoTone';
 
-import {entries} from 'lodash';
+import { entries } from 'lodash';
 
 import LogoutButton from '../containers/LogoutButton';
 
-
 const AddButton = ({ onExecute }) => (
-    <IconButton color="primary" onClick={onExecute} title="Добавить">
-        <AddIcon/>
-    </IconButton>
+    <IconButton color="primary" onClick={onExecute} title="Добавить"><AddIcon /></IconButton>
 );
 
 const DeleteButton = ({ onExecute }) => (
@@ -33,7 +30,7 @@ const DeleteButton = ({ onExecute }) => (
         title="Удалить"
         color="secondary"
         onClick={() => {
-            if (window.confirm('Are you sure you want to delete this row?')) {
+            if (window.confirm('Вы уверены, что хотите удалить эту строку?')) {
                 onExecute();
             }
         }}
@@ -48,7 +45,6 @@ const EditButton = ({ onExecute }) => (
     </IconButton>
 );
 
-
 const CommitButton = ({ onExecute }) => (
     <IconButton color="primary" onClick={onExecute} title="Сохранить">
         <SaveIcon />
@@ -60,7 +56,6 @@ const CancelButton = ({ onExecute }) => (
         <CancelIcon />
     </IconButton>
 );
-
 
 const commandComponents = {
     add: AddButton,
@@ -79,7 +74,6 @@ const Command = ({ id, onExecute }) => {
     );
 };
 
-
 const columns = [
     { name: 'title', title: 'Тема' },
     { name: 'adviser', title: 'Научрук' },
@@ -87,23 +81,33 @@ const columns = [
     { name: 'owner', title: 'Исполнитель' },
 ];
 
+const Cell = props => (
+    <Table.Cell
+        {...props}
+        style={{
+            border: '1px solid #e0e0e0',
+        }}
+    />
+);
 
-const Cell = props => <Table.Cell {...props} style={{
-    border: '1px solid #e0e0e0',
-}}/>;
-
-const HeaderCell = props => <Table.Cell {...props} style={{
-    border: '1px solid #e0e0e0',
-    fontWeight: 'bold',
-}}/>;
+const HeaderCell = props => (
+    <Table.Cell
+        {...props}
+        style={{
+            border: '1px solid #e0e0e0',
+            fontWeight: 'bold',
+        }}
+    />
+);
 
 const EditCell = props => <TableEditRow.Cell {...props} />;
 
 const getTopicId = topic => topic.id;
 
-
 const AdminMainTable = props => {
-    const {topics, updateTopics, addTopics, deleteTopics} = props;
+    const {
+        topics, updateTopics, addTopics, deleteTopics,
+    } = props;
 
     const [addedRows, setAddedRows] = useState([]);
     const changeAddedRows = value => setAddedRows(value);
@@ -140,7 +144,7 @@ const AdminMainTable = props => {
 
                 <Table cellComponent={Cell} />
 
-                <TableHeaderRow cellComponent={HeaderCell}/>
+                <TableHeaderRow cellComponent={HeaderCell} />
 
                 <TableEditRow cellComponent={EditCell} />
 
@@ -156,7 +160,7 @@ const AdminMainTable = props => {
                     leftColumns={leftFixedColumns}
                 />
             </Grid>
-            <LogoutButton/>
+            <LogoutButton />
         </Paper>
     );
 };
