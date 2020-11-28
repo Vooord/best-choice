@@ -5,6 +5,7 @@ import {mergeMap, catchError} from 'rxjs/operators';
 import {concat, from, of} from 'rxjs';
 
 import history from '../routes/history';
+import { toast } from 'react-toastify';
 
 
 const onAuthStartEpic = (action$, state) =>
@@ -32,7 +33,7 @@ const onAuthStartEpic = (action$, state) =>
                 catchError(errPromise => from(errPromise)
                     .pipe(
                         mergeMap(err => {
-                            window.alert(err.message);
+                            toast.error(err.message);
                             return of(authFail(err));
                         })
                     ))

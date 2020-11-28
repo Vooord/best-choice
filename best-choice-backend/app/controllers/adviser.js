@@ -8,7 +8,7 @@ class AdviserController {
         const { uid } = req.body;
 
         if (await Adviser.exists(uid)) {
-            return res.status(UNPROCESSABLE_ENTITY).json({ message: `Adviser "${uid}" already exists` });
+            return res.status(UNPROCESSABLE_ENTITY).json({ message: `Научный руководитель "${uid}" уже существует` });
         }
 
         await new Adviser(req.body);

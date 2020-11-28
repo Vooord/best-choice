@@ -4,6 +4,7 @@ import {mergeMap, catchError} from 'rxjs/operators';
 import {EMPTY, from, of} from 'rxjs';
 
 import history from '../routes/history';
+import { toast } from 'react-toastify';
 
 
 const onRegisterStartEpic = (action$, state) =>
@@ -30,7 +31,7 @@ const onRegisterStartEpic = (action$, state) =>
                 catchError(errPromise => from(errPromise)
                     .pipe(
                         mergeMap(err => {
-                            window.alert(err.message);
+                            toast.error(err.message);
                             return of(registerFail(err));
                         })
                     ))
@@ -42,7 +43,7 @@ const onRegisterSuccessEpic = action$ =>
     action$.pipe(
         ofType(REGISTER_SUCCESS),
         mergeMap(() => {
-            window.alert('Вы успешно зарегистрированы');
+            toast.success('Вы успешно зарегистрированы');
             history.push('/auth');
             return EMPTY;
         })

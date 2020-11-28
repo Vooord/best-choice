@@ -11,6 +11,7 @@ import {
     TOPICS_DELETE, deleteTopicsSuccess, deleteTopicsFail,
 } from '../actions/topic';
 import {updateCurrentUser} from '../actions/user';
+import { toast } from 'react-toastify';
 
 
 const occupyTopicEpic = (action$, state) =>
@@ -44,7 +45,7 @@ const occupyTopicEpic = (action$, state) =>
                 catchError(errPromise => console.log('err = ', errPromise) || from(errPromise)
                     .pipe(
                         mergeMap(err => {
-                            window.alert(err.message);
+                            toast.error(err.message);
                             return of(occupyTopicFail(err));
                         })
                     ))
@@ -76,7 +77,7 @@ const updateTopicEpic = (action$, state) =>
             catchError(errPromise => from(errPromise)
                 .pipe(
                     mergeMap(err => {
-                        window.alert(err.message);
+                        toast.error(err.message);
                         return of(updateTopicsFail(err));
                     })
                 ))
@@ -107,7 +108,7 @@ const addTopicEpic = (action$, state) =>
             catchError(errPromise => from(errPromise)
                 .pipe(
                     mergeMap(err => {
-                        window.alert(err.message);
+                        toast.error(err.message);
                         return of(addTopicsFail(err));
                     })
                 ))
@@ -138,7 +139,7 @@ const deleteTopicEpic = (action$, state) =>
             catchError(errPromise => from(errPromise)
                 .pipe(
                     mergeMap(err => {
-                        window.alert(err.message);
+                        toast.error(err.message);
                         return of(deleteTopicsFail(err));
                     })
                 ))

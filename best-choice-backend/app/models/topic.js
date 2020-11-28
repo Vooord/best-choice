@@ -1,5 +1,6 @@
 const {TopicCollection} = require('../config/schema');
 const _ = require('lodash');
+const {NO_UPDATE_FIELDS_PASSED: NO_UPDATE_FIELDS} = require('../constants/http');
 
 
 class Topic {
@@ -40,7 +41,7 @@ class Topic {
 
     static updateByTitle(title, fields) {
         if (!_.size(fields)) {
-            return Promise.reject('Cannot update with no fields passed');
+            return Promise.reject(NO_UPDATE_FIELDS);
         }
 
         return TopicCollection.updateOne(
@@ -53,7 +54,7 @@ class Topic {
 
     static updateById(id, fields) {
         if (!_.size(fields)) {
-            return Promise.reject('Cannot update with no fields passed');
+            return Promise.reject(NO_UPDATE_FIELDS);
         }
 
         return TopicCollection.updateOne(

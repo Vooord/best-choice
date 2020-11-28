@@ -33,7 +33,7 @@ const actualizeUserEpic = (action$, state) =>
                 catchError(errPromise => from(errPromise)
                     .pipe(
                         mergeMap(err => {
-                            window.alert(err.message);
+                            toast.erroralert(err.message);
                             return of(actualizeUserFail(err));
                         })
                     ))
