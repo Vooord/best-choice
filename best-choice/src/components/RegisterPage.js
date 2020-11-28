@@ -114,25 +114,6 @@ function SignUp(props) {
                                         onChange={changePassword}
                                     />
                                 </Grid>
-
-                                {/* <Grid item xs={12}> */}
-                                {/*    <TextField */}
-                                {/*        variant="outlined" */}
-                                {/*        required */}
-                                {/*        fullWidth */}
-                                {/*        label={label.CONFIRM_PASSWORD} */}
-                                {/*        type="password" */}
-                                {/*        value={} */}
-                                {/*        onChange={changePassword} */}
-                                {/*    /> */}
-                                {/* </Grid> */}
-
-                                {/* <Grid item xs={12}> */}
-                                {/*    <FormControlLabel */}
-                                {/*        control={<Checkbox value="allowExtraEmails" color="primary" />} */}
-                                {/*        label="I want to receive inspiration, marketing promotions and updates via email." */}
-                                {/*    /> */}
-                                {/* </Grid> */}
                             </Grid>
                             <Button
                                 type="submit"
