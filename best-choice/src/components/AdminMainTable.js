@@ -30,7 +30,7 @@ const DeleteButton = ({ onExecute }) => (
         title="Удалить"
         color="secondary"
         onClick={() => {
-            if (window.confirm('Are you sure you want to delete this row?')) {
+            if (window.confirm('Вы уверены, что хотите удалить эту строку?')) {
                 onExecute();
             }
         }}
