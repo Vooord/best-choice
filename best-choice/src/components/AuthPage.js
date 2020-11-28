@@ -42,7 +42,7 @@ const label = {
 
 const text = {
     SIGN_IN: 'Войти',
-    REGISTER_REDIRECT: 'Еще нет аккуанта? Зарегистрируйтесь',
+    REGISTER_REDIRECT: 'Еще нет аккаунта? Зарегистрируйтесь',
 };
 
 export default function AuthPage(props) {
