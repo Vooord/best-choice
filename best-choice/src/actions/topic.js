@@ -1,4 +1,4 @@
-import {createAction} from '../helpers/actions';
+import { createAction } from '../helpers/actions';
 
 export const TOPICS_UPDATE = 'topic/TOPICS_UPDATE';
 export const TOPICS_UPDATE_SUCCESS = 'topic/TOPICS_UPDATE_SUCCESS';

@@ -2,11 +2,10 @@ import React from 'react';
 
 import AdminMainTable from './AdminMainTable';
 import StudentMainTable from './StudentMainTable';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {makeStyles} from '@material-ui/core/styles';
-
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     preloaderWrapper: {
@@ -18,32 +17,29 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
 const Preloader = () => {
     const classes = useStyles();
 
     return (
         <div className={classes.preloaderWrapper}>
-            <CircularProgress className={classes.preloader} size={50}/>
+            <CircularProgress className={classes.preloader} size={50} />
         </div>
     );
 };
 
 const MainTableSwitcher = props => {
-    const {isAdmin} = props;
+    const { isAdmin } = props;
     if (isAdmin === undefined) {
-        return <Preloader/>;
+        return <Preloader />;
     }
 
-    return isAdmin ?
-        <AdminMainTable/>
-        :
-        <StudentMainTable/>;
+    return isAdmin
+        ? <AdminMainTable />
+        : <StudentMainTable />;
 };
 
-
 const mapStateToProps = state => {
-    const {isAdmin} = state.user.current;
+    const { isAdmin } = state.user.current;
     return {
         isAdmin,
     };

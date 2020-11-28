@@ -19,13 +19,13 @@ const MainRouter = props => {
                 <PrivateRoute path="/" component={MainTableSwitcher} />
                 <Redirect from="*" to="/" />
             </Switch>
-            <ToastContainer position={'top-right'} />
+            <ToastContainer position="top-right" />
         </ConnectedRouter>
     );
 };
 
 MainRouter.propTypes = {
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired, // eslint-disable-line
 };
 
 export default MainRouter;
