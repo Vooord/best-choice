@@ -7,7 +7,7 @@ const {UserCollection} = require('../config/schema');
 
 class User {
     // принимает все тело запроса и описывает, что с ним делать
-    constructor(newUserFields) {
+    static async create(newUserFields) {
         // поля, которые сохраняются под тем же именем, как пришли в теле запроса
         const sameFields = ['login', 'firstName', 'lastName', 'midName', 'group', 'isAdmin'];
         const newUser = _.pick(newUserFields, sameFields);
@@ -32,7 +32,9 @@ class User {
 
     static exists(login) {
         return UserCollection.findOne({ login })
-            .then(user => (!!user));
+            .then(user => {
+                exists: !!user;
+            });
     }
 
     static updateByLogin(login, fields) {

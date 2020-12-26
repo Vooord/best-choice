@@ -1,44 +1,56 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const _ = require('lodash');
 
-const {secret} = require('../config/db');
+
+const UserService = require('../services/user');
+
 const User = require('../models/user');
 const Topic = require('../models/topic');
 
 const {
-    AUTH_ERROR, UNAUTHORIZED,
-    DUPLICATE_LOGIN, UNPROCESSABLE_ENTITY,
+    AUTH_ERROR,
+    UNAUTHORIZED,
+    DUPLICATE_LOGIN,
+    UNPROCESSABLE_ENTITY,
     NOT_FOUND,
     USER_NOT_FOUND,
+    INTERNAL,
 } = require('../constants/http');
 
 
 class UserController {
     static async auth(req, res) {
-        const { login, password } = req.body;
-        const user = await User.getByLogin(login);
+        const result = await UserService.auth(req.body);
+        const {
+            message,
+            ...user
+        } = result;
 
-        if (user && bcrypt.compareSync(password, user.hash)) {
-            const token = jwt.sign({ sub: user.id }, secret);
-            return res.json({
-                ...user.toJSON(),
-                token,
-            });
+        if (message) {
+            switch (message) {
+                case AUTH_ERROR:
+                    return res.status(UNAUTHORIZED).json({ message });
+                default:
+                    return res.status(INTERNAL).json({ message });
+            }
         }
 
-        return res.status(UNAUTHORIZED).json({ message: AUTH_ERROR });
+        return res.json(user);
     };
 
     static async register (req, res) {
-        const { login } = req.body;
+        const { message } = await UserService.register(req.body);
 
-        if (await User.exists(login)) {
-            return res.status(UNPROCESSABLE_ENTITY).json({ message: DUPLICATE_LOGIN });
+        if (message) {
+            switch (message) {
+                case DUPLICATE_LOGIN:
+                    return res.status(UNPROCESSABLE_ENTITY).json({ message });
+                default:
+                    return res.status(INTERNAL).json({ message });
+            }
         }
 
-        await new User(req.body);
         return res.json({});
     };
 

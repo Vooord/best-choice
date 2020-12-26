@@ -3,6 +3,7 @@ const statuses = {
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
     UNPROCESSABLE_ENTITY: 422,
+    INTERNAL: 500,
 };
 
 const messages = {
@@ -22,6 +23,8 @@ const messages = {
     SHOULD_BE_ADMIN: 'Только администратор может осуществлять данную операцию',
 
     NO_UPDATE_FIELDS_PASSED: 'Отсутствуют данные для обновления',
+
+    DATABASE_ERROR: 'Произошла ошибка при работе с базой данных',
 };
 
 
